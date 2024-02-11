@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.Views.NavigationBarForm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -64,12 +65,13 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        DictionaryApp dictionaryApp = new DictionaryApp();
-        dictionaryApp.loadDictionaryFromFile("Assets/Viet_Anh.xml");
-
-        // Ví dụ tra cứu từ "a"
-        String meaningOfA = dictionaryApp.getMeaning("a");
-        System.out.println("Meaning of 'a':");
-        System.out.println(meaningOfA);
+//        DictionaryApp dictionaryApp = new DictionaryApp();
+//        dictionaryApp.loadDictionaryFromFile("Assets/Viet_Anh.xml");
+//
+//        // Ví dụ tra cứu từ "a"
+//        String meaningOfA = dictionaryApp.getMeaning("a");
+//        System.out.println("Meaning of 'a':");
+//        System.out.println(meaningOfA);
+        NavigationBarForm navigationBarForm = new NavigationBarForm();
     }
 }

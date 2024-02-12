@@ -1,16 +1,21 @@
 package org.example.Views;
 
 import org.example.Controllers.NavigationBarFromListener;
+import org.example.Models.DictionaryManager;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.net.URL;
 
-public class NavigationBarForm extends JFrame{
+public class NavigationBarForm extends JFrame {
     private JPanel NavigationBarForm;
     private JPanel jpNavigationBar;
     private JPanel jpContentArea;
     private JButton btnHomePage;
-    private JButton btnSettingPage;
+    private JButton btnFavoritePage;
+    private javax.swing.JSplitPane JSplitPane;
 
     private void initComponents() {
         this.setContentPane(NavigationBarForm);
@@ -27,6 +32,20 @@ public class NavigationBarForm extends JFrame{
 //
 //        htmlDocument = (HTMLDocument) display_message.getDocument();
 
+        DictionaryManager dictionaryManager = new DictionaryManager();
+
+        // Load từ điển từ hai file XML khác nhau
+        String vietnameseToEnglishFilePath = "Assets/Viet_Anh.xml";
+        String englishToVietnameseFilePath = "Assets/Anh_Viet.xml";
+
+        dictionaryManager.loadDictionariesFromXML(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
+
+        HomePageForm homePageForm = new HomePageForm(dictionaryManager);
+        homePageForm.loadDictionary(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
+
+        jpContentArea.add("HomePage", homePageForm.getHomePageForm());
+        jpContentArea.add("FavoritePage", new Label("This is the favorite page"));
+
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -34,10 +53,23 @@ public class NavigationBarForm extends JFrame{
     private void initListeners() {
         ActionListener navigationBarFromListener = new NavigationBarFromListener(this);
         btnHomePage.addActionListener(navigationBarFromListener);
-        btnSettingPage.addActionListener(navigationBarFromListener);
+        btnFavoritePage.addActionListener(navigationBarFromListener);
     }
     public NavigationBarForm() {
         initComponents();
         initListeners();
     }
+
+    public JButton getBtnHomePage() {
+        return btnHomePage;
+    }
+
+    public JButton getBtnFavoritePage() {
+        return btnFavoritePage;
+    }
+
+    public JPanel getJpContentArea() {
+        return jpContentArea;
+    }
+
 }

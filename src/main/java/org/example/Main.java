@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,14 +65,9 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
-//        DictionaryApp dictionaryApp = new DictionaryApp();
-//        dictionaryApp.loadDictionaryFromFile("Assets/Viet_Anh.xml");
-//
-//        // Ví dụ tra cứu từ "a"
-//        String meaningOfA = dictionaryApp.getMeaning("a");
-//        System.out.println("Meaning of 'a':");
-//        System.out.println(meaningOfA);
+    public static void main(String[] args) throws URISyntaxException {
         NavigationBarForm navigationBarForm = new NavigationBarForm();
+        String classPath = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        System.out.println("Đường dẫn của class hiện tại là: " + classPath);
     }
 }

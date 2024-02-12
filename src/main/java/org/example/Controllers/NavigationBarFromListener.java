@@ -1,7 +1,9 @@
 package org.example.Controllers;
 
+import org.example.Views.HomePageForm;
 import org.example.Views.NavigationBarForm;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,6 +16,12 @@ public class NavigationBarFromListener implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getSource() == navigationBarForm.getBtnHomePage()) {
+            System.out.println("Home button clicked");
+            ((CardLayout) navigationBarForm.getJpContentArea().getLayout()).show(navigationBarForm.getJpContentArea(), "HomePage");
+        } else if (e.getSource() == navigationBarForm.getBtnFavoritePage()) {
+            System.out.println("Favorite button clicked");
+            ((CardLayout) navigationBarForm.getJpContentArea().getLayout()).show(navigationBarForm.getJpContentArea(), "FavoritePage");
+        }
     }
 }

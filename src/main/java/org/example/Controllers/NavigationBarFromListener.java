@@ -19,9 +19,11 @@ public class NavigationBarFromListener implements ActionListener {
         if (e.getSource() == navigationBarForm.getBtnHomePage()) {
             System.out.println("Home button clicked");
             ((CardLayout) navigationBarForm.getJpContentArea().getLayout()).show(navigationBarForm.getJpContentArea(), "HomePage");
+            navigationBarForm.validate();
         } else if (e.getSource() == navigationBarForm.getBtnFavoritePage()) {
             System.out.println("Favorite button clicked");
             ((CardLayout) navigationBarForm.getJpContentArea().getLayout()).show(navigationBarForm.getJpContentArea(), "FavoritePage");
+            navigationBarForm.validate();
         }
     }
 }

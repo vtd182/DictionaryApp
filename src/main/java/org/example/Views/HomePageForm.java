@@ -4,10 +4,15 @@ import org.example.Controllers.HomePageFormListener;
 import org.example.Models.DictionaryManager;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.TreeSet;
 
 public class HomePageForm{
@@ -26,6 +31,7 @@ public class HomePageForm{
     private javax.swing.JSplitPane JSplitPanel;
     private JRadioButton rbtnAZ;
     private JRadioButton rbtnZA;
+    private JLabel lbSuggestMessage;
     private DictionaryManager dictionaryManager;
 
     public DictionaryManager getDictionaryManager() {
@@ -33,6 +39,8 @@ public class HomePageForm{
     }
     private void initComponents() {
         rbtnAZ.setSelected(true);
+        lbSuggestMessage.setText("");
+        lbSelectionWord.setText("");
     }
 
     private void initListeners() {
@@ -48,6 +56,7 @@ public class HomePageForm{
                     String selectedWord = (String) jlWord.getSelectedValue();
                     if (selectedWord != null) {
                         String meaning = dictionaryManager.getMeaning(selectedWord);
+                        lbSelectionWord.setText(selectedWord);
                         if (meaning != null) {
                             taMeaning.setText(meaning);
                         }
@@ -74,13 +83,63 @@ public class HomePageForm{
                 }
             }
         });
+
+        tfSearch.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("[tfSearch] Enter pressed");
+                String keyword = tfSearch.getText().trim();
+                searchAndUpdateList(keyword);
+                DefaultListModel<String> currentModel = (DefaultListModel<String>) jlWord.getModel();
+                if (currentModel.size() == 0) {
+                    suggestWords(keyword);
+                }
+            }
+        });
+
+        tfSearch.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+                System.out.println("[tfSearch] Changed");
+                String keyword = tfSearch.getText().trim();
+                searchAndUpdateList(keyword);
+                if (keyword.length() == 0) {
+                    setDefaultValueForSuggest();
+                }
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                System.out.println("[tfSearch] Removed");
+                String keyword = tfSearch.getText().trim();
+                searchAndUpdateList(keyword);
+                if (keyword.length() == 0) {
+                    setDefaultValueForSuggest();
+                }
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                System.out.println("[tfSearch] Inserted");
+                String keyword = tfSearch.getText().trim();
+                searchAndUpdateList(keyword);
+                if (keyword.length() == 0) {
+                    setDefaultValueForSuggest();
+                }
+            }
+        });
+
+        lbSuggestMessage.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                String suggestedWord = lbSuggestMessage.getText().substring(13); // Bỏ "Did you mean: "
+                suggestedWord = suggestedWord.substring(0, suggestedWord.length() - 1).trim(); // Bỏ dấu "?"
+                tfSearch.setText(suggestedWord);
+                searchAndUpdateList(suggestedWord);
+                lbSuggestMessage.setText("");
+                jlWord.setSelectedIndex(0);
+            }
+        });
     }
 
-
-
     public void loadDictionary(String vietnameseToEnglishFilePath, String englishToVietnameseFilePath) {
+        dictionaryManager = new DictionaryManager();
         dictionaryManager.loadDictionariesFromXML(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
-        // Load từ điển từ DictionaryManager
         refreshDictionary();
     }
 
@@ -116,6 +175,7 @@ public class HomePageForm{
         }
 
         jlWord.setModel(model);
+
     }
     public HomePageForm() {
         initComponents();
@@ -153,4 +213,30 @@ public class HomePageForm{
         initComponents();
         initListeners();
     }
+
+    private void searchAndUpdateList(String keyword) {
+        System.out.println("[searchAndUpdateList] Searching for: " + keyword);
+        DefaultListModel<String> model = new DefaultListModel<>();
+        TreeSet<String> relatedWords = dictionaryManager.search(keyword);
+
+        for (String word : relatedWords) {
+            model.addElement(word);
+        }
+
+        jlWord.setModel(model);
+    }
+
+    private void suggestWords(String keyword) {
+        String suggestedWord = dictionaryManager.suggest(keyword);
+        if (suggestedWord != null) {
+            lbSuggestMessage.setText("Did you mean: " + suggestedWord + "?");
+        } else {
+            lbSuggestMessage.setText("");
+        }
+    }
+
+    private void setDefaultValueForSuggest() {
+        lbSuggestMessage.setText("");
+    }
+
 }

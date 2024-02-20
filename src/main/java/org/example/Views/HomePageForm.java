@@ -8,6 +8,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -41,6 +42,11 @@ public class HomePageForm{
         rbtnAZ.setSelected(true);
         lbSuggestMessage.setText("");
         lbSelectionWord.setText("");
+
+        setButtonIcon(btnFavorite, "Assets/star.png", 32, 32);
+        setButtonIcon(btnEditSave, "Assets/edit.png", 32, 32);
+        setButtonIcon(btnDelete, "Assets/delete.png", 32, 32);
+        setButtonIcon(btnChange, "Assets/ic1.png", 40, 40);
     }
 
     private void initListeners() {
@@ -201,9 +207,7 @@ public class HomePageForm{
     public JSplitPane getJSplitPanel() {
         return JSplitPanel;
     }
-    public void updateButtonContent() {
 
-    }
     public JPanel getHomePageForm() {
         return HomePageForm;
     }
@@ -239,4 +243,12 @@ public class HomePageForm{
         lbSuggestMessage.setText("");
     }
 
+    private void setButtonIcon(JButton button, String iconPath, int width, int height) {
+        ImageIcon originalIcon = new ImageIcon(iconPath);
+        Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        button.setIcon(new ImageIcon(scaledImage));
+        button.setOpaque(false);
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+    }
 }

@@ -15,15 +15,17 @@ import java.util.TreeSet;
 
 // todo: Map thêm thuộc tính isFavorite cho từng từ, và thêm phương thức để thêm/xóa từ vào danh sách favorite
 public class DictionaryManager {
-    private Map<String, String> vietnameseToEnglishDictionary;
-    private Map<String, String> englishToVietnameseDictionary;
+    private Map<String, Word> vietnameseToEnglishDictionary;
+    private Map<String, Word> englishToVietnameseDictionary;
+    private TreeSet<String> vietnameseToEnglishFavoriteWords;
+    private TreeSet<String> englishToVietnameseFavoriteWords;
     public boolean isVietnameseToEnglishMode;
 
-    public Map<String, String> getVietnameseToEnglishDictionary() {
+    public Map<String, Word> getVietnameseToEnglishDictionary() {
         return vietnameseToEnglishDictionary;
     }
 
-    public Map<String, String> getEnglishToVietnameseDictionary() {
+    public Map<String, Word> getEnglishToVietnameseDictionary() {
         return englishToVietnameseDictionary;
     }
 
@@ -38,9 +40,9 @@ public class DictionaryManager {
         englishToVietnameseDictionary = loadDictionaryFromXML(englishToVietnameseFilePath);
     }
 
-    private TreeMap<String, String> loadDictionaryFromXML(String filePath) {
+    private TreeMap<String, Word> loadDictionaryFromXML(String filePath) {
         // Đọc dữ liệu từ file XML và trả về một HashMap
-        TreeMap<String, String> dictionary = new TreeMap<>();
+        TreeMap<String, Word> dictionary = new TreeMap<>();
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -67,8 +69,12 @@ public class DictionaryManager {
                             meanings.append(meaningElement.getTextContent()).append("\n");
                         }
                     }
-
-                    dictionary.put(word, meanings.toString());
+                    try {
+                        dictionary.put(word, Word.parseFromString(meanings.toString()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("Error while parsing word: " + word);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -83,9 +89,9 @@ public class DictionaryManager {
 
     public String getMeaning(String word) {
         if (isVietnameseToEnglishMode) {
-            return vietnameseToEnglishDictionary.get(word);
+            return vietnameseToEnglishDictionary.get(word).toString();
         } else {
-            return englishToVietnameseDictionary.get(word);
+            return englishToVietnameseDictionary.get(word).toString();
         }
     }
 
@@ -150,7 +156,6 @@ public class DictionaryManager {
                 }
             }
         }
-
         return dp[s1.length()][s2.length()];
     }
 }

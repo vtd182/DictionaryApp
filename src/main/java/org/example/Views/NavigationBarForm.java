@@ -35,16 +35,24 @@ public class NavigationBarForm extends JFrame {
         DictionaryManager dictionaryManager = new DictionaryManager();
 
         // Load từ điển từ hai file XML khác nhau
+
+        // Load all word from file
         String vietnameseToEnglishFilePath = "Assets/Viet_Anh.xml";
         String englishToVietnameseFilePath = "Assets/Anh_Viet.xml";
+
+        // Load favorite word
+        String vietnameseToEnglishFavoriteFilePath = "";
+        String englishToVietnameseFavoriteFilePath = "";
 
         dictionaryManager.loadDictionariesFromXML(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
 
         HomePageForm homePageForm = new HomePageForm(dictionaryManager);
         homePageForm.loadDictionary(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
 
+        HomePageForm homePageFormForFavorite = new HomePageForm(dictionaryManager);
+
         jpContentArea.add("HomePage", homePageForm.getHomePageForm());
-        jpContentArea.add("FavoritePage", new Label("This is the favorite page"));
+        jpContentArea.add("FavoritePage", homePageFormForFavorite.getHomePageForm());
 
         this.setLocationRelativeTo(null);
         this.setVisible(true);

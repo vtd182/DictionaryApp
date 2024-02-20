@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.Models.Word;
 import org.example.Views.NavigationBarForm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -18,7 +19,7 @@ import java.util.Map;
 public class Main {
     public static class DictionaryApp {
 
-        private Map<String, String> dictionary;
+        private Map<String, Word> dictionary;
 
         public DictionaryApp() {
             dictionary = new HashMap<>();
@@ -51,8 +52,12 @@ public class Main {
                                 meanings.append(meaningElement.getTextContent()).append("\n");
                             }
                         }
-
-                        dictionary.put(word, meanings.toString());
+                        try {
+                            dictionary.put(word, Word.parseFromString(meanings.toString()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("Error while parsing word: " + word);
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -61,13 +66,27 @@ public class Main {
         }
 
         public String getMeaning(String word) {
-            return dictionary.get(word);
+            return dictionary.get(word).toString();
         }
+
+
     }
 
     public static void main(String[] args) throws URISyntaxException {
         NavigationBarForm navigationBarForm = new NavigationBarForm();
         String classPath = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         System.out.println("Đường dẫn của class hiện tại là: " + classPath);
+
+
+//        DictionaryApp dictionaryApp = new DictionaryApp();
+//
+//        // Đường dẫn tới tệp từ điển XML
+//        String filePath = "Assets/Anh_Viet.xml";
+//
+//        // Load từ điển từ tệp XML
+//        dictionaryApp.loadDictionaryFromFile(filePath);
+//
+//        // In ra ý nghĩa của một số từ trong từ điển
+//        System.out.println(dictionaryApp.getMeaning("(logic học)"));
     }
 }

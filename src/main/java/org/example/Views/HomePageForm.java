@@ -24,7 +24,6 @@ public class HomePageForm{
     private JButton btnFavorite;
     private JButton btnEditSave;
     private JButton btnDelete;
-    private JTextArea taMeaning;
     private JPanel jpSearch;
     private JPanel jpSearchBar;
     private JLabel lbSelectionWord;
@@ -33,6 +32,7 @@ public class HomePageForm{
     private JRadioButton rbtnAZ;
     private JRadioButton rbtnZA;
     private JLabel lbSuggestMessage;
+    private JEditorPane MeaningArea;
     private DictionaryManager dictionaryManager;
 
     public DictionaryManager getDictionaryManager() {
@@ -62,9 +62,10 @@ public class HomePageForm{
                     String selectedWord = (String) jlWord.getSelectedValue();
                     if (selectedWord != null) {
                         String meaning = dictionaryManager.getMeaning(selectedWord);
+                        String htmlMeaning = dictionaryManager.getHtmlMeaning(selectedWord);
                         lbSelectionWord.setText(selectedWord);
                         if (meaning != null) {
-                            taMeaning.setText(meaning);
+                            MeaningArea.setText(htmlMeaning);
                         }
                     }
                 }

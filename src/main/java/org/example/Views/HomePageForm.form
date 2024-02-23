@@ -192,12 +192,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="74694" class="javax.swing.JTextArea" binding="taMeaning">
+                  <component id="25384" class="javax.swing.JEditorPane" binding="MeaningArea">
                     <constraints/>
                     <properties>
+                      <contentType value="text/html"/>
                       <font size="16"/>
-                      <lineWrap value="true"/>
-                      <wrapStyleWord value="true"/>
                     </properties>
                   </component>
                 </children>

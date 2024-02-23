@@ -95,6 +95,14 @@ public class DictionaryManager {
         }
     }
 
+    public String getHtmlMeaning(String word) {
+        if (isVietnameseToEnglishMode) {
+            return vietnameseToEnglishDictionary.get(word).toHtmlString();
+        } else {
+            return englishToVietnameseDictionary.get(word).toHtmlString();
+        }
+    }
+
     public TreeSet<String> search(String keyword) {
         TreeSet<String> relatedWords = new TreeSet<>();
 

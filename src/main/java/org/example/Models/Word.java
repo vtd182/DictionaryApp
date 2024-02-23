@@ -28,19 +28,6 @@ public class Word {
         return wordTypes;
     }
 
-    public void printAll() {
-        System.out.println("Word: " + word);
-        for (WordType wordType : wordTypes) {
-            System.out.println("\tWordType: " + wordType.getType());
-            for (Meaning meaning : wordType.getMeanings()) {
-                System.out.println("\t\tMeaning: " + meaning.getMeaning());
-                for (SubMeaning subMeaning : meaning.getSubMeanings()) {
-                    System.out.println("\t\t\tSubMeaning: " + subMeaning.getSubMeaning() + " Definition: " + subMeaning.getDefinition());
-                }
-            }
-        }
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -113,4 +100,44 @@ public class Word {
         }
         return newWord;
     }
+
+    public String toHtmlString() {
+        StringBuilder html = new StringBuilder("<html><body>");
+
+        // Define font size, margin, and font family values
+        int fontSizeHeading = 16;
+        int fontSizeParagraph = 14;
+        int marginLeft = 20;
+        String fontFamily = "Arial, sans-serif";
+
+        if (pronunciation != null) {
+            html.append("<p style='font-size:" + fontSizeParagraph + "px; font-family: " + fontFamily + ";'>").append(pronunciation).append("</p>");
+        }
+
+        for (WordType wordType : wordTypes) {
+
+            if (!wordType.getType().equals("DEFAULT_TYPE")) {
+                html.append("<h2 style='font-size:" + fontSizeHeading + "px; font-family: " + fontFamily + ";'>").append(wordType.getType()).append("</h2>");
+            } else {
+                html.append("<h2 style='font-size:" + fontSizeHeading + "px; font-family: " + fontFamily + ";'>").append("Meaning").append("</h2>");
+            }
+            for (Meaning meaning : wordType.getMeanings()) {
+                html.append("<p style='margin-left:" + marginLeft + "px;font-size:" + fontSizeParagraph + "px; font-family: " + fontFamily + ";'>").append("<strong>").append(meaning.getMeaning()).append("</strong>").append("</p>");
+
+                for (SubMeaning subMeaning : meaning.getSubMeanings()) {
+                    html.append("<p style='margin-left:" + marginLeft + "px;font-size:" + (fontSizeParagraph - 2) + "px; font-family: " + fontFamily + ";'>").append(subMeaning.getSubMeaning())
+                            .append(": ")
+                            .append("<i>")
+                            .append(subMeaning.getDefinition()).append("</i>")
+                            .append("</p>");
+//                    html.append("<p style='margin-left:" + marginLeft + "px;font-size:" + (fontSizeParagraph - 2) + "px; font-family: " + fontFamily + ";'>").append("<i>")
+//                            .append(subMeaning.getDefinition()).append("</i>")
+//                            .append("</p>");
+                }
+            }
+        }
+        html.append("</body></html>");
+        return html.toString();
+    }
+
 }

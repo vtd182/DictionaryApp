@@ -7,19 +7,27 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-// todo: Map thêm thuộc tính isFavorite cho từng từ, và thêm phương thức để thêm/xóa từ vào danh sách favorite
 public class DictionaryManager {
     private Map<String, Word> vietnameseToEnglishDictionary;
     private Map<String, Word> englishToVietnameseDictionary;
-    private TreeSet<String> vietnameseToEnglishFavoriteWords;
-    private TreeSet<String> englishToVietnameseFavoriteWords;
+    private Map<String, Word> vietnameseToEnglishFavoriteWords;
+    private Map<String, Word> englishToVietnameseFavoriteWords;
     public boolean isVietnameseToEnglishMode;
+    private boolean isFavoriteMode;
+
+    public void setIsFavoriteMode(boolean isFavoriteMode) {
+        this.isFavoriteMode = isFavoriteMode;
+    }
 
     public Map<String, Word> getVietnameseToEnglishDictionary() {
         return vietnameseToEnglishDictionary;
@@ -29,15 +37,33 @@ public class DictionaryManager {
         return englishToVietnameseDictionary;
     }
 
+    public Map<String, Word> getVietnameseToEnglishFavoriteWords() {
+        return vietnameseToEnglishFavoriteWords;
+    }
+
+    public Map<String, Word> getEnglishToVietnameseFavoriteWords() {
+        return englishToVietnameseFavoriteWords;
+    }
+
     public DictionaryManager() {
+        System.out.println("DictionaryManager constructor");
         this.vietnameseToEnglishDictionary = new TreeMap<>();
         this.englishToVietnameseDictionary = new TreeMap<>();
+        this.vietnameseToEnglishFavoriteWords = new TreeMap<>();
+        this.englishToVietnameseFavoriteWords = new TreeMap<>();
         this.isVietnameseToEnglishMode = true; // Mặc định chế độ từ Việt-Anh
+        this.isFavoriteMode = false;
     }
 
     public void loadDictionariesFromXML(String vietnameseToEnglishFilePath, String englishToVietnameseFilePath) {
         vietnameseToEnglishDictionary = loadDictionaryFromXML(vietnameseToEnglishFilePath);
         englishToVietnameseDictionary = loadDictionaryFromXML(englishToVietnameseFilePath);
+    }
+
+    public void loadFavoriteWordsFromXML(String vietnameseToEnglishFavoriteFilePath, String englishToVietnameseFavoriteFilePath) {
+        vietnameseToEnglishFavoriteWords = loadDictionaryFromXML(vietnameseToEnglishFavoriteFilePath);
+        englishToVietnameseFavoriteWords = loadDictionaryFromXML(englishToVietnameseFavoriteFilePath);
+        System.out.println("Load favorite words from XML");
     }
 
     private TreeMap<String, Word> loadDictionaryFromXML(String filePath) {
@@ -129,7 +155,8 @@ public class DictionaryManager {
         int minDistance = Integer.MAX_VALUE;
 
         if (isVietnameseToEnglishMode) {
-            for (String word : vietnameseToEnglishDictionary.keySet()) {
+            var keySet = isFavoriteMode? vietnameseToEnglishFavoriteWords.keySet() : vietnameseToEnglishDictionary.keySet();
+            for (String word : keySet) {
                 int distance = levenshteinDistance(keyword, word);
                 if (distance < minDistance) {
                     minDistance = distance;
@@ -137,7 +164,8 @@ public class DictionaryManager {
                 }
             }
         } else {
-            for (String word : englishToVietnameseDictionary.keySet()) {
+            var keySet = isFavoriteMode? englishToVietnameseFavoriteWords.keySet() : englishToVietnameseDictionary.keySet();
+            for (String word : keySet) {
                 int distance = levenshteinDistance(keyword, word);
                 if (distance < minDistance) {
                     minDistance = distance;
@@ -166,5 +194,76 @@ public class DictionaryManager {
         }
         return dp[s1.length()][s2.length()];
     }
+
+    public boolean isFavoriteWord(String word) {
+        if (isVietnameseToEnglishMode) {
+            return vietnameseToEnglishFavoriteWords.containsKey(word);
+        } else {
+            return englishToVietnameseFavoriteWords.containsKey(word);
+        }
+    }
+
+    public void addFavoriteWord(String word, Word meaning) {
+        if (isVietnameseToEnglishMode) {
+            vietnameseToEnglishFavoriteWords.put(word, meaning);
+        } else {
+            englishToVietnameseFavoriteWords.put(word, meaning);
+        }
+    }
+
+    public void removeFavoriteWord(String word) {
+        if (isVietnameseToEnglishMode) {
+            vietnameseToEnglishFavoriteWords.remove(word);
+        } else {
+            englishToVietnameseFavoriteWords.remove(word);
+        }
+    }
+
+    public Word getWord(String word) {
+        if (isVietnameseToEnglishMode) {
+            return vietnameseToEnglishDictionary.get(word);
+        } else {
+            return englishToVietnameseDictionary.get(word);
+        }
+    }
+
+    public void saveFavoriteWordsToXML(String vietnameseToEnglishFavoriteFilePath, String englishToVietnameseFavoriteFilePath) {
+        saveDictionaryToXML(vietnameseToEnglishFavoriteWords, vietnameseToEnglishFavoriteFilePath);
+        saveDictionaryToXML(englishToVietnameseFavoriteWords, englishToVietnameseFavoriteFilePath);
+    }
+
+    private void saveDictionaryToXML(Map<String, Word> dictionary, String filePath) {
+        // Ghi dữ liệu từ HashMap vào file XML
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.newDocument();
+
+            Element rootElement = document.createElement("dictionary");
+            document.appendChild(rootElement);
+
+            for (String word : dictionary.keySet()) {
+                Element recordElement = document.createElement("record");
+                rootElement.appendChild(recordElement);
+
+                Element wordElement = document.createElement("word");
+                wordElement.appendChild(document.createTextNode(word));
+                recordElement.appendChild(wordElement);
+
+                Element meaningElement = document.createElement("meaning");
+                meaningElement.appendChild(document.createTextNode(dictionary.get(word).toString()));
+                recordElement.appendChild(meaningElement);
+            }
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(new File(filePath));
+            transformer.transform(source, result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 

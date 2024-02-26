@@ -68,8 +68,6 @@ public class Main {
         public String getMeaning(String word) {
             return dictionary.get(word).toString();
         }
-
-
     }
 
     public static void main(String[] args) throws URISyntaxException {

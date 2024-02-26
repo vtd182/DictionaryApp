@@ -6,6 +6,7 @@ import java.util.List;
 public class Word {
     private String word;
     private String pronunciation;
+    private String meaning;
     private List<WordType> wordTypes;
 
     public Word(String word) {
@@ -28,21 +29,25 @@ public class Word {
         return wordTypes;
     }
 
+    public String getMeaning() {
+        return meaning;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (pronunciation != null) {
-            sb.append("Word: ").append(word).append("\n");
-            sb.append("Pronunciation: ").append(pronunciation).append("\n");
+            sb.append("@").append(word);
+            sb.append(" ").append(pronunciation).append("\n");
         } else {
-            sb.append("Word: ").append(word).append("\n");
+            sb.append("@").append(word).append("\n");
         }
         for (WordType wordType : wordTypes) {
-            sb.append("\tWordType: ").append(wordType.getType()).append("\n");
+            sb.append("*").append(wordType.getType()).append("\n");
             for (Meaning meaning : wordType.getMeanings()) {
-                sb.append("\t\tMeaning: ").append(meaning.getMeaning()).append("\n");
+                sb.append("-").append(meaning.getMeaning()).append("\n");
                 for (SubMeaning subMeaning : meaning.getSubMeanings()) {
-                    sb.append("\t\t\tSubMeaning: ").append(subMeaning.getSubMeaning()).append(" Definition: ").append(subMeaning.getDefinition()).append("\n");
+                    sb.append("=").append(subMeaning.getSubMeaning()).append("+").append(subMeaning.getDefinition()).append("\n");
                 }
             }
         }
@@ -122,7 +127,7 @@ public class Word {
                 html.append("<h2 style='font-size:" + fontSizeHeading + "px; font-family: " + fontFamily + ";'>").append("Meaning").append("</h2>");
             }
             for (Meaning meaning : wordType.getMeanings()) {
-                html.append("<p style='margin-left:" + marginLeft + "px;font-size:" + fontSizeParagraph + "px; font-family: " + fontFamily + ";'>").append("<strong>").append(meaning.getMeaning()).append("</strong>").append("</p>");
+                html.append("<p style='margin-left:" + marginLeft + "px;font-size:" + fontSizeParagraph + "px; font-family: " + fontFamily + "; color:#FF6347'>").append("<strong>").append(meaning.getMeaning()).append("</strong>").append("</p>");
 
                 for (SubMeaning subMeaning : meaning.getSubMeanings()) {
                     html.append("<p style='margin-left:" + marginLeft + "px;font-size:" + (fontSizeParagraph - 2) + "px; font-family: " + fontFamily + ";'>").append(subMeaning.getSubMeaning())

@@ -17,6 +17,17 @@ public class NavigationBarForm extends JFrame {
     private JButton btnFavoritePage;
     private javax.swing.JSplitPane JSplitPane;
 
+    private HomePageForm homePageForm;
+    private HomePageForm homePageFormForFavorite;
+
+    public HomePageForm getHomePageForm() {
+        return homePageForm;
+    }
+
+    public HomePageForm getHomePageFormForFavorite() {
+        return homePageFormForFavorite;
+    }
+
     private void initComponents() {
         this.setContentPane(NavigationBarForm);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,9 +42,6 @@ public class NavigationBarForm extends JFrame {
 //        btn_send.setBorderPainted(false);
 //
 //        htmlDocument = (HTMLDocument) display_message.getDocument();
-
-        DictionaryManager dictionaryManager = new DictionaryManager();
-
         // Load từ điển từ hai file XML khác nhau
 
         // Load all word from file
@@ -41,15 +49,16 @@ public class NavigationBarForm extends JFrame {
         String englishToVietnameseFilePath = "Assets/Anh_Viet.xml";
 
         // Load favorite word
-        String vietnameseToEnglishFavoriteFilePath = "";
-        String englishToVietnameseFavoriteFilePath = "";
+        String vietnameseToEnglishFavoriteFilePath = "Assets/Fav_Viet_Anh.xml";
+        String englishToVietnameseFavoriteFilePath = "Assets/Fav_Anh_Viet.xml";
 
-        dictionaryManager.loadDictionariesFromXML(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
-
-        HomePageForm homePageForm = new HomePageForm(dictionaryManager);
+        homePageForm = HomePageForm.getInstance();
         homePageForm.loadDictionary(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
+        homePageForm.loadFavoriteDictionary(vietnameseToEnglishFavoriteFilePath, englishToVietnameseFavoriteFilePath);
 
-        HomePageForm homePageFormForFavorite = new HomePageForm(dictionaryManager);
+        homePageFormForFavorite = HomePageForm.getInstance();
+        homePageFormForFavorite.loadDictionary(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
+        homePageFormForFavorite.loadFavoriteDictionary(vietnameseToEnglishFavoriteFilePath, englishToVietnameseFavoriteFilePath);
 
         jpContentArea.add("HomePage", homePageForm.getHomePageForm());
         jpContentArea.add("FavoritePage", homePageFormForFavorite.getHomePageForm());

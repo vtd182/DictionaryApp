@@ -18,6 +18,7 @@ import java.util.TreeSet;
 
 public class HomePageForm{
 
+    private static HomePageForm instance = null;
     private JList jlWord;
     private JButton btnChange;
     private JTextField tfSearch;
@@ -34,16 +35,27 @@ public class HomePageForm{
     private JLabel lbSuggestMessage;
     private JEditorPane MeaningArea;
     private DictionaryManager dictionaryManager;
-
+    private boolean isFavoriteHomePage = false;
     public DictionaryManager getDictionaryManager() {
         return dictionaryManager;
+    }
+
+    public void setIsFavoriteHomePage(boolean isFavoriteHomePage) {
+        this.isFavoriteHomePage = isFavoriteHomePage;
+        this.getDictionaryManager().setIsFavoriteMode(isFavoriteHomePage);
+    }
+    public static HomePageForm getInstance() {
+        if (instance == null) {
+            instance = new HomePageForm();
+        }
+        return instance;
     }
     private void initComponents() {
         rbtnAZ.setSelected(true);
         lbSuggestMessage.setText("");
-        lbSelectionWord.setText("");
+        lbSelectionWord.setText("Selection Word");
 
-        setButtonIcon(btnFavorite, "Assets/star.png", 32, 32);
+        setButtonIcon(btnFavorite, "Assets/un_star.png", 32, 32);
         setButtonIcon(btnEditSave, "Assets/edit.png", 32, 32);
         setButtonIcon(btnDelete, "Assets/delete.png", 32, 32);
         setButtonIcon(btnChange, "Assets/ic1.png", 40, 40);
@@ -64,9 +76,17 @@ public class HomePageForm{
                         String meaning = dictionaryManager.getMeaning(selectedWord);
                         String htmlMeaning = dictionaryManager.getHtmlMeaning(selectedWord);
                         lbSelectionWord.setText(selectedWord);
+                        System.out.println("Selected word: " + selectedWord);
+                        if (dictionaryManager.isFavoriteWord(selectedWord)) {
+                            setButtonIcon(btnFavorite, "Assets/star.png", 32, 32);
+                        } else {
+                            setButtonIcon(btnFavorite, "Assets/un_star.png", 32, 32);
+                        }
+
                         if (meaning != null) {
                             MeaningArea.setText(htmlMeaning);
                         }
+
                     }
                 }
             }
@@ -150,12 +170,26 @@ public class HomePageForm{
         refreshDictionary();
     }
 
+    public void loadFavoriteDictionary(String vietnameseToEnglishFavoriteFilePath, String englishToVietnameseFavoriteFilePath) {
+        dictionaryManager.loadFavoriteWordsFromXML(vietnameseToEnglishFavoriteFilePath, englishToVietnameseFavoriteFilePath);
+        refreshDictionary();
+    }
+
     public void refreshDictionary() {
         DefaultListModel<String> model = new DefaultListModel<>();
-        for (String word : (dictionaryManager.isVietnameseToEnglishMode ?
-                dictionaryManager.getVietnameseToEnglishDictionary().keySet() :
-                dictionaryManager.getEnglishToVietnameseDictionary().keySet())) {
-            model.addElement(word);
+        System.out.println("[refreshDictionary] Refreshing dictionary");
+        if (!isFavoriteHomePage) {
+            for (String word : (dictionaryManager.isVietnameseToEnglishMode ?
+                    dictionaryManager.getVietnameseToEnglishDictionary().keySet() :
+                    dictionaryManager.getEnglishToVietnameseDictionary().keySet())) {
+                model.addElement(word);
+            }
+        } else {
+            for (String word : (dictionaryManager.isVietnameseToEnglishMode ?
+                    dictionaryManager.getVietnameseToEnglishFavoriteWords().keySet() :
+                    dictionaryManager.getEnglishToVietnameseFavoriteWords().keySet())) {
+                model.addElement(word);
+            }
         }
         jlWord.setModel(model);
     }
@@ -164,10 +198,18 @@ public class HomePageForm{
         DefaultListModel<String> model = new DefaultListModel<>();
         TreeSet<String> sortedWords = new TreeSet<>();
 
-        if (dictionaryManager.isVietnameseToEnglishMode) {
-            sortedWords.addAll(dictionaryManager.getVietnameseToEnglishDictionary().keySet());
+        if (!isFavoriteHomePage) {
+            if (dictionaryManager.isVietnameseToEnglishMode) {
+                sortedWords.addAll(dictionaryManager.getVietnameseToEnglishDictionary().keySet());
+            } else {
+                sortedWords.addAll(dictionaryManager.getEnglishToVietnameseDictionary().keySet());
+            }
         } else {
-            sortedWords.addAll(dictionaryManager.getEnglishToVietnameseDictionary().keySet());
+            if (dictionaryManager.isVietnameseToEnglishMode) {
+                sortedWords.addAll(dictionaryManager.getVietnameseToEnglishFavoriteWords().keySet());
+            } else {
+                sortedWords.addAll(dictionaryManager.getEnglishToVietnameseFavoriteWords().keySet());
+            }
         }
 
         // Thêm từng từ vào model theo thứ tự AZ hoặc ZA
@@ -181,10 +223,18 @@ public class HomePageForm{
             }
         }
 
+
+
         jlWord.setModel(model);
 
     }
     public HomePageForm() {
+        initComponents();
+        initListeners();
+    }
+
+    public HomePageForm(boolean isFavoriteHomePage) {
+        this.isFavoriteHomePage = isFavoriteHomePage;
         initComponents();
         initListeners();
     }
@@ -211,12 +261,6 @@ public class HomePageForm{
 
     public JPanel getHomePageForm() {
         return HomePageForm;
-    }
-
-    public HomePageForm(DictionaryManager dictionaryManager) {
-        this.dictionaryManager = dictionaryManager;
-        initComponents();
-        initListeners();
     }
 
     private void searchAndUpdateList(String keyword) {
@@ -251,5 +295,17 @@ public class HomePageForm{
         button.setOpaque(false);
         button.setBorderPainted(false);
         button.setContentAreaFilled(false);
+    }
+
+    public void switchFavoriteButtonIcon(boolean isFavorite) {
+        if (isFavorite) {
+            setButtonIcon(btnFavorite, "Assets/star.png", 32, 32);
+        } else {
+            setButtonIcon(btnFavorite, "Assets/un_star.png", 32, 32);
+        }
+    }
+
+    public String getSelectedWord() {
+        return lbSelectionWord.getText();
     }
 }

@@ -25,6 +25,9 @@ public class Word {
         wordTypes.add(wordType);
     }
 
+    public String getWord() {
+        return word;
+    }
     public List<WordType> getWordTypes() {
         return wordTypes;
     }

@@ -28,6 +28,12 @@ public class NavigationBarFromListener implements ActionListener {
             navigationBarForm.getHomePageFormForFavorite().setIsFavoriteHomePage(true);
             navigationBarForm.getHomePageFormForFavorite().refreshDictionary();
             navigationBarForm.validate();
+        } else if (e.getSource() == navigationBarForm.getBtnHistoryPage()) {
+            System.out.println("History button clicked");
+        } else if (e.getSource() == navigationBarForm.getBtnSettingPage()) {
+            System.out.println("Setting button clicked");
+            ((CardLayout) navigationBarForm.getJpContentArea().getLayout()).show(navigationBarForm.getJpContentArea(), "SettingPage");
+            navigationBarForm.validate();
         }
     }
 }

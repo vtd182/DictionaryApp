@@ -18,6 +18,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class DictionaryManager {
+
+    private static DictionaryManager instance = null;
     private Map<String, Word> vietnameseToEnglishDictionary;
     private Map<String, Word> englishToVietnameseDictionary;
     private Map<String, Word> vietnameseToEnglishFavoriteWords;
@@ -45,7 +47,13 @@ public class DictionaryManager {
         return englishToVietnameseFavoriteWords;
     }
 
-    public DictionaryManager() {
+    public static DictionaryManager getInstance() {
+        if (instance == null) {
+            instance = new DictionaryManager();
+        }
+        return instance;
+    }
+    private DictionaryManager() {
         System.out.println("DictionaryManager constructor");
         this.vietnameseToEnglishDictionary = new TreeMap<>();
         this.englishToVietnameseDictionary = new TreeMap<>();
@@ -265,5 +273,14 @@ public class DictionaryManager {
         }
     }
 
+    public void deleteWord(String word) {
+        if (isVietnameseToEnglishMode) {
+            vietnameseToEnglishDictionary.remove(word);
+            vietnameseToEnglishFavoriteWords.remove(word);
+        } else {
+            englishToVietnameseDictionary.remove(word);
+            englishToVietnameseFavoriteWords.remove(word);
+        }
+    }
 }
 

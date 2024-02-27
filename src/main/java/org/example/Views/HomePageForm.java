@@ -14,10 +14,10 @@ import java.awt.event.ActionListener;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collection;
 import java.util.TreeSet;
 
-public class HomePageForm{
-
+public class HomePageForm {
     private static HomePageForm instance = null;
     private JList jlWord;
     private JButton btnChange;
@@ -36,6 +36,7 @@ public class HomePageForm{
     private JEditorPane MeaningArea;
     private DictionaryManager dictionaryManager;
     private boolean isFavoriteHomePage = false;
+    private boolean isEditing = false;
     public DictionaryManager getDictionaryManager() {
         return dictionaryManager;
     }
@@ -43,6 +44,14 @@ public class HomePageForm{
     public void setIsFavoriteHomePage(boolean isFavoriteHomePage) {
         this.isFavoriteHomePage = isFavoriteHomePage;
         this.getDictionaryManager().setIsFavoriteMode(isFavoriteHomePage);
+    }
+
+    public boolean isFavoriteHomePage() {
+        return isFavoriteHomePage;
+    }
+
+    public JLabel getSelectedWordLabel() {
+        return lbSelectionWord;
     }
     public static HomePageForm getInstance() {
         if (instance == null) {
@@ -73,10 +82,12 @@ public class HomePageForm{
                 if (!event.getValueIsAdjusting()) {
                     String selectedWord = (String) jlWord.getSelectedValue();
                     if (selectedWord != null) {
+                        if (isEditing) {
+                            switchEditingMode();
+                        }
                         String meaning = dictionaryManager.getMeaning(selectedWord);
                         String htmlMeaning = dictionaryManager.getHtmlMeaning(selectedWord);
                         lbSelectionWord.setText(selectedWord);
-                        System.out.println("Selected word: " + selectedWord);
                         if (dictionaryManager.isFavoriteWord(selectedWord)) {
                             setButtonIcon(btnFavorite, "Assets/star.png", 32, 32);
                         } else {
@@ -98,6 +109,8 @@ public class HomePageForm{
                 if (rbtnAZ.isSelected()) {
                     refreshDictionary(true); // Sắp xếp theo thứ tự AZ
                     rbtnZA.setSelected(false);
+                } else {
+                    rbtnAZ.setSelected(true);
                 }
             }
         });
@@ -107,6 +120,8 @@ public class HomePageForm{
                 if (rbtnZA.isSelected()) {
                     refreshDictionary(false); // Sắp xếp theo thứ tự ZA
                     rbtnAZ.setSelected(false);
+                } else {
+                    rbtnZA.setSelected(true);
                 }
             }
         });
@@ -165,7 +180,7 @@ public class HomePageForm{
     }
 
     public void loadDictionary(String vietnameseToEnglishFilePath, String englishToVietnameseFilePath) {
-        dictionaryManager = new DictionaryManager();
+        dictionaryManager = DictionaryManager.getInstance();
         dictionaryManager.loadDictionariesFromXML(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
         refreshDictionary();
     }
@@ -198,6 +213,7 @@ public class HomePageForm{
         DefaultListModel<String> model = new DefaultListModel<>();
         TreeSet<String> sortedWords = new TreeSet<>();
 
+
         if (!isFavoriteHomePage) {
             if (dictionaryManager.isVietnameseToEnglishMode) {
                 sortedWords.addAll(dictionaryManager.getVietnameseToEnglishDictionary().keySet());
@@ -222,19 +238,10 @@ public class HomePageForm{
                 model.addElement(word);
             }
         }
-
-
-
         jlWord.setModel(model);
 
     }
     public HomePageForm() {
-        initComponents();
-        initListeners();
-    }
-
-    public HomePageForm(boolean isFavoriteHomePage) {
-        this.isFavoriteHomePage = isFavoriteHomePage;
         initComponents();
         initListeners();
     }
@@ -261,6 +268,10 @@ public class HomePageForm{
 
     public JPanel getHomePageForm() {
         return HomePageForm;
+    }
+
+    public JEditorPane getMeaningArea() {
+        return MeaningArea;
     }
 
     private void searchAndUpdateList(String keyword) {
@@ -305,7 +316,39 @@ public class HomePageForm{
         }
     }
 
+    public void switchModeButtonIcon(boolean isVietnameseToEnglishMode) {
+        if (isVietnameseToEnglishMode) {
+            setButtonIcon(btnChange, "Assets/ic1.png", 40, 40);
+        } else {
+            setButtonIcon(btnChange, "Assets/ic2.png", 40, 40);
+        }
+    }
+
+    public boolean isEditing() {
+        return isEditing;
+    }
+    public void switchEditingMode() {
+        if (isEditing) {
+            isEditing = false;
+            setButtonIcon(btnEditSave, "Assets/edit.png", 32, 32);
+            MeaningArea.setEditable(false);
+            MeaningArea.setContentType("text/html");
+        } else {
+            isEditing = true;
+            setButtonIcon(btnEditSave, "Assets/save.png", 32, 32);
+            MeaningArea.setEditable(true);
+            MeaningArea.setContentType("text");
+        }
+    }
+
     public String getSelectedWord() {
         return lbSelectionWord.getText();
+    }
+
+    public boolean showDeleteConfirmationDialog(String wordToDelete) {
+        int result = JOptionPane.showConfirmDialog(this.HomePageForm,
+                "Are you sure you want to delete '" + wordToDelete + "'?", "Delete Confirmation",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        return result == JOptionPane.YES_OPTION;
     }
 }

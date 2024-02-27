@@ -1,13 +1,10 @@
 package org.example.Views;
 
 import org.example.Controllers.NavigationBarFromListener;
-import org.example.Models.DictionaryManager;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.net.URL;
+import java.util.Set;
 
 public class NavigationBarForm extends JFrame {
     private JPanel NavigationBarForm;
@@ -16,16 +13,23 @@ public class NavigationBarForm extends JFrame {
     private JButton btnHomePage;
     private JButton btnFavoritePage;
     private javax.swing.JSplitPane JSplitPane;
-
+    private JButton btnHistoryPage;
+    private JButton btnSettingPage;
+    private JButton btnTranslate;
     private HomePageForm homePageForm;
-    private HomePageForm homePageFormForFavorite;
 
-    public HomePageForm getHomePageForm() {
-        return homePageForm;
-    }
+    private HomePageForm homePageFormForFavorite;
+    private SettingPageForm settingPageForm;
 
     public HomePageForm getHomePageFormForFavorite() {
         return homePageFormForFavorite;
+    }
+    public SettingPageForm getSettingPageForm() {
+        return settingPageForm;
+    }
+
+    public HomePageForm getHomePageForm() {
+        return homePageForm;
     }
 
     private void initComponents() {
@@ -52,16 +56,19 @@ public class NavigationBarForm extends JFrame {
         String vietnameseToEnglishFavoriteFilePath = "Assets/Fav_Viet_Anh.xml";
         String englishToVietnameseFavoriteFilePath = "Assets/Fav_Anh_Viet.xml";
 
-        homePageForm = HomePageForm.getInstance();
+        homePageForm = new HomePageForm();
         homePageForm.loadDictionary(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
         homePageForm.loadFavoriteDictionary(vietnameseToEnglishFavoriteFilePath, englishToVietnameseFavoriteFilePath);
 
-        homePageFormForFavorite = HomePageForm.getInstance();
+        homePageFormForFavorite = new HomePageForm();
         homePageFormForFavorite.loadDictionary(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
         homePageFormForFavorite.loadFavoriteDictionary(vietnameseToEnglishFavoriteFilePath, englishToVietnameseFavoriteFilePath);
 
+        settingPageForm = new SettingPageForm();
+
         jpContentArea.add("HomePage", homePageForm.getHomePageForm());
         jpContentArea.add("FavoritePage", homePageFormForFavorite.getHomePageForm());
+        jpContentArea.add("SettingPage", settingPageForm.getSettingPageForm());
 
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -71,6 +78,9 @@ public class NavigationBarForm extends JFrame {
         ActionListener navigationBarFromListener = new NavigationBarFromListener(this);
         btnHomePage.addActionListener(navigationBarFromListener);
         btnFavoritePage.addActionListener(navigationBarFromListener);
+        btnHistoryPage.addActionListener(navigationBarFromListener);
+        btnSettingPage.addActionListener(navigationBarFromListener);
+        btnTranslate.addActionListener(navigationBarFromListener);
     }
     public NavigationBarForm() {
         initComponents();
@@ -83,6 +93,18 @@ public class NavigationBarForm extends JFrame {
 
     public JButton getBtnFavoritePage() {
         return btnFavoritePage;
+    }
+
+    public JButton getBtnHistoryPage() {
+        return btnHistoryPage;
+    }
+
+    public JButton getBtnSettingPage() {
+        return btnSettingPage;
+    }
+
+    public JButton getBtnTranslate() {
+        return btnTranslate;
     }
 
     public JPanel getJpContentArea() {

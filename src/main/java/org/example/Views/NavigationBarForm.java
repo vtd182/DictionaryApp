@@ -61,8 +61,6 @@ public class NavigationBarForm extends JFrame {
         homePageForm.loadFavoriteDictionary(vietnameseToEnglishFavoriteFilePath, englishToVietnameseFavoriteFilePath);
 
         homePageFormForFavorite = new HomePageForm();
-        homePageFormForFavorite.loadDictionary(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
-        homePageFormForFavorite.loadFavoriteDictionary(vietnameseToEnglishFavoriteFilePath, englishToVietnameseFavoriteFilePath);
 
         settingPageForm = new SettingPageForm();
 

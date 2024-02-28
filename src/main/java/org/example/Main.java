@@ -21,6 +21,10 @@ public class Main {
 
         private Map<String, Word> dictionary;
 
+        public Map<String, Word> getDictionary() {
+            return dictionary;
+        }
+
         public DictionaryApp() {
             dictionary = new HashMap<>();
         }
@@ -79,12 +83,12 @@ public class Main {
 //        DictionaryApp dictionaryApp = new DictionaryApp();
 //
 //        // Đường dẫn tới tệp từ điển XML
-//        String filePath = "Assets/Anh_Viet.xml";
+//        String filePath = "Assets/test.xml";
 //
 //        // Load từ điển từ tệp XML
 //        dictionaryApp.loadDictionaryFromFile(filePath);
-//
-//        // In ra ý nghĩa của một số từ trong từ điển
-//        System.out.println(dictionaryApp.getMeaning("(logic học)"));
+//        dictionaryApp.getDictionary().forEach((k, v) -> System.out.println(k + " : " + v));
+
+        // In ra ý nghĩa của một số từ trong từ điển
     }
 }

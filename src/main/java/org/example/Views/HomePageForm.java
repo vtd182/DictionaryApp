@@ -2,6 +2,7 @@ package org.example.Views;
 
 import org.example.Controllers.HomePageFormListener;
 import org.example.Models.DictionaryManager;
+import org.example.Models.Word;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -15,10 +16,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class HomePageForm {
-    private static HomePageForm instance = null;
     private JList jlWord;
     private JButton btnChange;
     private JTextField tfSearch;
@@ -34,6 +36,7 @@ public class HomePageForm {
     private JRadioButton rbtnZA;
     private JLabel lbSuggestMessage;
     private JEditorPane MeaningArea;
+    private JScrollPane jScrollPane;
     private DictionaryManager dictionaryManager;
     private boolean isFavoriteHomePage = false;
     private boolean isEditing = false;
@@ -53,12 +56,7 @@ public class HomePageForm {
     public JLabel getSelectedWordLabel() {
         return lbSelectionWord;
     }
-    public static HomePageForm getInstance() {
-        if (instance == null) {
-            instance = new HomePageForm();
-        }
-        return instance;
-    }
+
     private void initComponents() {
         rbtnAZ.setSelected(true);
         lbSuggestMessage.setText("");
@@ -134,6 +132,23 @@ public class HomePageForm {
                 DefaultListModel<String> currentModel = (DefaultListModel<String>) jlWord.getModel();
                 if (currentModel.size() == 0) {
                     suggestWords(keyword);
+                } else {
+                    if (currentModel.contains(keyword)) {
+                        var selectedIndex = currentModel.indexOf(keyword);
+                        jlWord.ensureIndexIsVisible(selectedIndex);
+
+                        Point p = jlWord.indexToLocation(selectedIndex);
+                        // Nếu vị trí có thể được xác định
+                        if (p != null) {
+                            // Lấy vị trí hiện tại của khu vực cuộn
+                            Point currentScroll = jScrollPane.getViewport().getViewPosition();
+                            // Xác định vị trí mới để cuộn
+                            Point newScroll = new Point(currentScroll.x, p.y);
+                            // Cuộn khu vực cuộn đến vị trí mới
+                            jScrollPane.getViewport().setViewPosition(newScroll);
+                        }
+                        jlWord.setSelectedIndex(selectedIndex);
+                    }
                 }
             }
         });
@@ -174,13 +189,32 @@ public class HomePageForm {
                 tfSearch.setText(suggestedWord);
                 searchAndUpdateList(suggestedWord);
                 lbSuggestMessage.setText("");
-                jlWord.setSelectedIndex(0);
+                DefaultListModel<String> currentModel = (DefaultListModel<String>) jlWord.getModel();
+                if (currentModel.size() == 0) {
+                    suggestWords(suggestedWord);
+                } else {
+                    if (currentModel.contains(suggestedWord)) {
+                        var selectedIndex = currentModel.indexOf(suggestedWord);
+                        jlWord.ensureIndexIsVisible(selectedIndex);
+
+                        Point p = jlWord.indexToLocation(selectedIndex);
+                        // Nếu vị trí có thể được xác định
+                        if (p != null) {
+                            // Lấy vị trí hiện tại của khu vực cuộn
+                            Point currentScroll = jScrollPane.getViewport().getViewPosition();
+                            // Xác định vị trí mới để cuộn
+                            Point newScroll = new Point(currentScroll.x, p.y);
+                            // Cuộn khu vực cuộn đến vị trí mới
+                            jScrollPane.getViewport().setViewPosition(newScroll);
+                        }
+                        jlWord.setSelectedIndex(selectedIndex);
+                    }
+                }
             }
         });
     }
 
     public void loadDictionary(String vietnameseToEnglishFilePath, String englishToVietnameseFilePath) {
-        dictionaryManager = DictionaryManager.getInstance();
         dictionaryManager.loadDictionariesFromXML(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
         refreshDictionary();
     }
@@ -244,6 +278,7 @@ public class HomePageForm {
     public HomePageForm() {
         initComponents();
         initListeners();
+        dictionaryManager = DictionaryManager.getInstance();
     }
 
     public JButton getBtnChange() {

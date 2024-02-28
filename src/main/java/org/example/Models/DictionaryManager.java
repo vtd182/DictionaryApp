@@ -1,5 +1,6 @@
 package org.example.Models;
 
+import org.example.Helper.XMLHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -7,6 +8,8 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -65,6 +68,7 @@ public class DictionaryManager {
 
     public void loadDictionariesFromXML(String vietnameseToEnglishFilePath, String englishToVietnameseFilePath) {
         vietnameseToEnglishDictionary = loadDictionaryFromXML(vietnameseToEnglishFilePath);
+        System.out.println("á" + vietnameseToEnglishDictionary.get("á"));
         englishToVietnameseDictionary = loadDictionaryFromXML(englishToVietnameseFilePath);
     }
 
@@ -74,48 +78,65 @@ public class DictionaryManager {
         System.out.println("Load favorite words from XML");
     }
 
+//    private TreeMap<String, Word> loadDictionaryFromXML(String filePath) {
+//        // Đọc dữ liệu từ file XML và trả về một HashMap
+//        TreeMap<String, Word> dictionary = new TreeMap<>();
+//        try {
+//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder builder = factory.newDocumentBuilder();
+//            Document document = builder.parse(new File(filePath));
+//
+//            NodeList recordList = document.getElementsByTagName("record");
+//
+//            for (int i = 0; i < recordList.getLength(); i++) {
+//                Node recordNode = recordList.item(i);
+//
+//                if (recordNode.getNodeType() == Node.ELEMENT_NODE) {
+//                    Element recordElement = (Element) recordNode;
+//
+//                    String word = recordElement.getElementsByTagName("word").item(0).getTextContent();
+//
+//                    NodeList meaningList = recordElement.getElementsByTagName("meaning");
+//
+//                    StringBuilder meanings = new StringBuilder();
+//                    for (int j = 0; j < meaningList.getLength(); j++) {
+//                        Node meaningNode = meaningList.item(j);
+//
+//                        if (meaningNode.getNodeType() == Node.ELEMENT_NODE) {
+//                            Element meaningElement = (Element) meaningNode;
+//                            meanings.append(meaningElement.getTextContent()).append("\n");
+//                        }
+//                    }
+//                    try {
+//                        dictionary.put(word, Word.parseFromString(meanings.toString()));
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        System.out.println("Error while parsing word: " + word);
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return dictionary;
+//    }
+
     private TreeMap<String, Word> loadDictionaryFromXML(String filePath) {
-        // Đọc dữ liệu từ file XML và trả về một HashMap
-        TreeMap<String, Word> dictionary = new TreeMap<>();
+        TreeMap<String, Word> dictionary = null;
         try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(new File(filePath));
-
-            NodeList recordList = document.getElementsByTagName("record");
-
-            for (int i = 0; i < recordList.getLength(); i++) {
-                Node recordNode = recordList.item(i);
-
-                if (recordNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element recordElement = (Element) recordNode;
-
-                    String word = recordElement.getElementsByTagName("word").item(0).getTextContent();
-
-                    NodeList meaningList = recordElement.getElementsByTagName("meaning");
-
-                    StringBuilder meanings = new StringBuilder();
-                    for (int j = 0; j < meaningList.getLength(); j++) {
-                        Node meaningNode = meaningList.item(j);
-
-                        if (meaningNode.getNodeType() == Node.ELEMENT_NODE) {
-                            Element meaningElement = (Element) meaningNode;
-                            meanings.append(meaningElement.getTextContent()).append("\n");
-                        }
-                    }
-                    try {
-                        dictionary.put(word, Word.parseFromString(meanings.toString()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.out.println("Error while parsing word: " + word);
-                    }
-                }
-            }
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+            XMLHandler xmlHandler = new XMLHandler();
+            saxParser.parse(new File(filePath), xmlHandler);
+            dictionary = xmlHandler.getDictionary();
         } catch (Exception e) {
             e.printStackTrace();
         }
+//        System.out.println("From " + filePath + " " + dictionary.size() + " words loaded.");
+//        System.out.println(dictionary.get("á"));
         return dictionary;
     }
+
 
     public void switchMode() {
         isVietnameseToEnglishMode = !isVietnameseToEnglishMode;

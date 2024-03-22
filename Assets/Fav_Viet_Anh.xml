@@ -1,93 +1,51 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<dictionary>
-    <record>
-        <word>Biên Hoà</word>
-        <meaning>@Biên Hoà
-            *DEFAULT_TYPE
-            -Xem Đồng Nai
-        </meaning>
-    </record>
-    <record>
-        <word>Blowing dust and wind</word>
-        <meaning>@Blowing dust and wind
-            *DEFAULT_TYPE
-            -(Gió bụi trên đường) The wind and dust blowing on the road
-            -Troubled (times).
-            =Thuở trời đất nổi cơn gió bụi+In troubled times by Heaven's will
-            -Hard, full of ups and downs
-            =Cuộc đời gió bụi+A life full of ups and downs
-        </meaning>
-    </record>
-    <record>
-        <word>Bình Định</word>
-        <meaning>@Bình Định
-            *DEFAULT_TYPE
-            -Quy Nhơn, provincial capital of Bình Định, is 1,065km from Hà Nội on National Highway 1. In the old days,
-        </meaning>
-    </record>
-    <record>
-        <word>Bắc bán cầu</word>
-        <meaning>@Bắc bán cầu
-            *DEFAULT_TYPE
-            -Northern hemisphere
-        </meaning>
-    </record>
-    <record>
-        <word>Bắc đẩu</word>
-        <meaning>@Bắc đẩu
-            *DEFAULT_TYPE
-            -The Great Bear
-        </meaning>
-    </record>
-    <record>
-        <word>Chăm</word>
-        <meaning>@Chăm
-            *DEFAULT_TYPE
-            -dân tộc Chăm
-            -With about 100,000 inhabitants, Chăm (Chàm, Chiêm, Hời) ethnic group originates from Ancient Chăm Pa
-            -THE UNIQUE CHĂM CULTURE: The Chăm culture is a unique tradition, contributing much to the+diversity and
-            -The Chăm are one of the 53 ethnic groups in Vietnam and comprise various subgroups. There are around 98,000
-        </meaning>
-    </record>
-    <record>
-        <word>Dao</word>
-        <meaning>@Dao
-            *DEFAULT_TYPE
-            -dân tộc Dao
-            -With more than 400,000 inhabitants, Dao ethnic group occupies 0.65% of the
-            =Vietnamese population and belongs to Mèo-Dao linguistic group. They live+at the altitude of 700-1000m,
-            =considerable altitude. Most of them inhabit Hà Giang - Tuyên Quang, and+part of them in the northwest
-        </meaning>
-    </record>
-    <record>
-        <word>Giãn xương giãn cốt</word>
-        <meaning>@Giãn xương giãn cốt
-            *DEFAULT_TYPE
-            -như giãn xương
-        </meaning>
-    </record>
-    <record>
-        <word>Hoà Bình</word>
-        <meaning>@Hoà Bình
-            *DEFAULT_TYPE
-            -Located on Highway 6, Hoà Bình provincial capital is 70km southwest of Hà Nội. Hoà Bình town and the
-        </meaning>
-    </record>
-    <record>
-        <word>Hà Nội</word>
-        <meaning>@Hà Nội
-            *DEFAULT_TYPE
-            -Hà Nội is the political capital of Vietnam. Hà Nội lies in Red River Delta and is situated in a tropical
-            -Chùa một cột (One-pillar Pagoda): Its original name was Diên Hựu (long-lasting happiness and good luck).
-            -Quốc Tử Giám (Temple of Literature) was built in 1070 as a dedication to the founder of Confucianism. Six
-            -Chùa Kim Liên (Kim Lien Pagoda): Legend has it that in the 12th century, Princess Tu Hoa, daughter of King
-            -Chùa Quán Sứ (Quan Su Pagoda) was built in the 17th century. It is located in the street of the same name.
-            -Đền Quan Thánh (Quan Thanh Temple): The three ancient Chinese characters which are still seen today on the
-            -Đền Hai Bà Trưng (Hai Bà Trưng Temple) is also called Đồng Nhân Temple, because it is located in Đồng Nhân
-            -Hồ Tây (West Lake) &amp; Đường Thanh Niên (Youth Road): Youth Road can be compared to a beautiful bridge
-            -Hồ Hoàn Kiếm (Lake of Restored Sword): The name of this lake is derived from a legend having it that a
-            -Đền Ngọc Sơn (Ngoc Son Temple): Initially, the temple was called Ngọc Sơn Pagoda. Later, it was renamed as
-            -NGHI TÀM: A VILLAGE OF FLOWERS? Once upon a time, the King of Nhà Hậu Lý decided to build a palace for
-        </meaning>
-    </record>
-</dictionary>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><dictionary><record><word>Biên Hoà</word><meaning>@Biên Hoà
+    *DEFAULT_TYPE
+    -Xem Đồng Nai
+</meaning></record><record><word>Blowing dust and wind</word><meaning>@Blowing dust and wind
+    *DEFAULT_TYPE
+    -(Gió bụi trên đường) The wind and dust blowing on the road
+    -Troubled (times).
+    =Thuở trời đất nổi cơn gió bụi+In troubled times by Heaven's will
+    -Hard, full of ups and downs
+    =Cuộc đời gió bụi+A life full of ups and downs
+</meaning></record><record><word>Bình Định</word><meaning>@Bình Định
+    *DEFAULT_TYPE
+    -Quy Nhơn, provincial capital of Bình Định, is 1,065km from Hà Nội on National Highway 1. In the old days,
+</meaning></record><record><word>Bắc bán cầu</word><meaning>@Bắc bán cầu
+    *DEFAULT_TYPE
+    -Northern hemisphere
+</meaning></record><record><word>Bắc đẩu</word><meaning>@Bắc đẩu
+    *DEFAULT_TYPE
+    -The Great Bear
+</meaning></record><record><word>Chăm</word><meaning>@Chăm
+    *DEFAULT_TYPE
+    -dân tộc Chăm
+    -With about 100,000 inhabitants, Chăm (Chàm, Chiêm, Hời) ethnic group originates from Ancient Chăm Pa
+    -THE UNIQUE CHĂM CULTURE: The Chăm culture is a unique tradition, contributing much to the+diversity and
+    -The Chăm are one of the 53 ethnic groups in Vietnam and comprise various subgroups. There are around 98,000
+</meaning></record><record><word>Dao</word><meaning>@Dao
+    *DEFAULT_TYPE
+    -dân tộc Dao
+    -With more than 400,000 inhabitants, Dao ethnic group occupies 0.65% of the
+    =Vietnamese population and belongs to Mèo-Dao linguistic group. They live+at the altitude of 700-1000m,
+    =considerable altitude. Most of them inhabit Hà Giang - Tuyên Quang, and+part of them in the northwest
+</meaning></record><record><word>Giãn xương giãn cốt</word><meaning>@Giãn xương giãn cốt
+    *DEFAULT_TYPE
+    -như giãn xương
+</meaning></record><record><word>Hoà Bình</word><meaning>@Hoà Bình
+    *DEFAULT_TYPE
+    -Located on Highway 6, Hoà Bình provincial capital is 70km southwest of Hà Nội. Hoà Bình town and the
+</meaning></record><record><word>Hà Nội</word><meaning>@Hà Nội
+    *DEFAULT_TYPE
+    -Hà Nội is the political capital of Vietnam. Hà Nội lies in Red River Delta and is situated in a tropical
+    -Chùa một cột (One-pillar Pagoda): Its original name was Diên Hựu (long-lasting happiness and good luck).
+    -Quốc Tử Giám (Temple of Literature) was built in 1070 as a dedication to the founder of Confucianism. Six
+    -Chùa Kim Liên (Kim Lien Pagoda): Legend has it that in the 12th century, Princess Tu Hoa, daughter of King
+    -Chùa Quán Sứ (Quan Su Pagoda) was built in the 17th century. It is located in the street of the same name.
+    -Đền Quan Thánh (Quan Thanh Temple): The three ancient Chinese characters which are still seen today on the
+    -Đền Hai Bà Trưng (Hai Bà Trưng Temple) is also called Đồng Nhân Temple, because it is located in Đồng Nhân
+    -Hồ Tây (West Lake) &amp; Đường Thanh Niên (Youth Road): Youth Road can be compared to a beautiful bridge
+    -Hồ Hoàn Kiếm (Lake of Restored Sword): The name of this lake is derived from a legend having it that a
+    -Đền Ngọc Sơn (Ngoc Son Temple): Initially, the temple was called Ngọc Sơn Pagoda. Later, it was renamed as
+    -NGHI TÀM: A VILLAGE OF FLOWERS? Once upon a time, the King of Nhà Hậu Lý decided to build a palace for
+</meaning></record></dictionary>

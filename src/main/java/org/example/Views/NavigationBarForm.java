@@ -1,6 +1,9 @@
 package org.example.Views;
 
 import org.example.Controllers.NavigationBarFromListener;
+import org.example.Helper.ConstantString;
+import org.example.Models.AutoSaveManager;
+import org.example.Models.DictionaryManager;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -17,17 +20,15 @@ public class NavigationBarForm extends JFrame {
     private JButton btnSettingPage;
     private JButton btnTranslate;
     private HomePageForm homePageForm;
-
     private HomePageForm homePageFormForFavorite;
     private SettingPageForm settingPageForm;
-
+    private HistoryPageForm historyPageForm;
     public HomePageForm getHomePageFormForFavorite() {
         return homePageFormForFavorite;
     }
     public SettingPageForm getSettingPageForm() {
         return settingPageForm;
     }
-
     public HomePageForm getHomePageForm() {
         return homePageForm;
     }
@@ -39,34 +40,16 @@ public class NavigationBarForm extends JFrame {
         int defaultHeight = 600;
         this.setSize(defaultWidth, defaultHeight);
 
-//        ImageIcon originalIcon = new ImageIcon("Assets/send-message.png");
-//        Image scaledImage = originalIcon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-//        btn_send.setIcon(new ImageIcon(scaledImage));
-//        btn_send.setOpaque(false);
-//        btn_send.setBorderPainted(false);
-//
-//        htmlDocument = (HTMLDocument) display_message.getDocument();
-        // Load từ điển từ hai file XML khác nhau
-
-        // Load all word from file
-        String vietnameseToEnglishFilePath = "Assets/Viet_Anh.xml";
-        String englishToVietnameseFilePath = "Assets/Anh_Viet.xml";
-
-        // Load favorite word
-        String vietnameseToEnglishFavoriteFilePath = "Assets/Fav_Viet_Anh.xml";
-        String englishToVietnameseFavoriteFilePath = "Assets/Fav_Anh_Viet.xml";
-
         homePageForm = new HomePageForm();
-        homePageForm.loadDictionary(vietnameseToEnglishFilePath, englishToVietnameseFilePath);
-        homePageForm.loadFavoriteDictionary(vietnameseToEnglishFavoriteFilePath, englishToVietnameseFavoriteFilePath);
-
         homePageFormForFavorite = new HomePageForm();
-
         settingPageForm = new SettingPageForm();
+        historyPageForm = new HistoryPageForm();
+
 
         jpContentArea.add("HomePage", homePageForm.getHomePageForm());
         jpContentArea.add("FavoritePage", homePageFormForFavorite.getHomePageForm());
         jpContentArea.add("SettingPage", settingPageForm.getSettingPageForm());
+        jpContentArea.add("HistoryPage", historyPageForm.getHistoryPageForm());
 
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -83,6 +66,7 @@ public class NavigationBarForm extends JFrame {
     public NavigationBarForm() {
         initComponents();
         initListeners();
+        AutoSaveManager.getInstance().startAutoSave();
     }
 
     public JButton getBtnHomePage() {

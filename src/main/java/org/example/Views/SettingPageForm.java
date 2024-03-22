@@ -17,6 +17,8 @@ public class SettingPageForm {
     private JButton btnSend;
     private JEditorPane DisplayWordArea;
     private JButton btnSave;
+    private JComboBox comboBox_time_save;
+    private JButton btn_submit;
 
     public JPanel getSettingPageForm() {
         return SettingPageForm;
@@ -25,11 +27,23 @@ public class SettingPageForm {
     public SettingPageForm() {
         initComponent();
         initListener();
+        comboBox_time_save.setSelectedIndex(1);
+    }
+
+    public JComboBox getComboBox_time_save() {
+        return comboBox_time_save;
+    }
+
+    public JButton getBtn_submit() {
+        return btn_submit;
     }
 
     private void initComponent() {
         setButtonIcon(btnSend, "Assets/send.png", 32, 32);
         vERadioButton.setSelected(true);
+        comboBox_time_save.addItem("1 minute");
+        comboBox_time_save.addItem("5 minutes");
+        comboBox_time_save.addItem("10 minutes");
     }
 
     private void initListener() {
@@ -38,6 +52,7 @@ public class SettingPageForm {
         btnSave.addActionListener(settingPageFormListener);
         eVRadioButton.addActionListener(settingPageFormListener);
         vERadioButton.addActionListener(settingPageFormListener);
+        comboBox_time_save.addActionListener(settingPageFormListener);
     }
     private void setButtonIcon(JButton button, String iconPath, int width, int height) {
         ImageIcon originalIcon = new ImageIcon(iconPath);

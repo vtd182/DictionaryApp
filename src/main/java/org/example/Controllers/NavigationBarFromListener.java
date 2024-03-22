@@ -21,7 +21,6 @@ public class NavigationBarFromListener implements ActionListener {
             navigationBarForm.getHomePageForm().setIsFavoriteHomePage(false);
             navigationBarForm.getHomePageForm().refreshDictionary();
             navigationBarForm.validate();
-
         } else if (e.getSource() == navigationBarForm.getBtnFavoritePage()) {
             System.out.println("Favorite button clicked");
             ((CardLayout) navigationBarForm.getJpContentArea().getLayout()).show(navigationBarForm.getJpContentArea(), "FavoritePage");
@@ -30,6 +29,8 @@ public class NavigationBarFromListener implements ActionListener {
             navigationBarForm.validate();
         } else if (e.getSource() == navigationBarForm.getBtnHistoryPage()) {
             System.out.println("History button clicked");
+            ((CardLayout) navigationBarForm.getJpContentArea().getLayout()).show(navigationBarForm.getJpContentArea(), "HistoryPage");
+            navigationBarForm.validate();
         } else if (e.getSource() == navigationBarForm.getBtnSettingPage()) {
             System.out.println("Setting button clicked");
             ((CardLayout) navigationBarForm.getJpContentArea().getLayout()).show(navigationBarForm.getJpContentArea(), "SettingPage");

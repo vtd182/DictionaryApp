@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -40,6 +41,8 @@ public class HomePageForm {
     private DictionaryManager dictionaryManager;
     private boolean isFavoriteHomePage = false;
     private boolean isEditing = false;
+    private boolean isVietnameseToEnglishMode = true;
+
     public DictionaryManager getDictionaryManager() {
         return dictionaryManager;
     }
@@ -83,16 +86,16 @@ public class HomePageForm {
                         if (isEditing) {
                             switchEditingMode();
                         }
-                        String meaning = dictionaryManager.getMeaning(selectedWord);
-                        String htmlMeaning = dictionaryManager.getHtmlMeaning(selectedWord);
+
                         lbSelectionWord.setText(selectedWord);
-                        if (dictionaryManager.isFavoriteWord(selectedWord)) {
+                        if (dictionaryManager.isFavoriteWord(selectedWord, isVietnameseToEnglishMode)) {
                             setButtonIcon(btnFavorite, "Assets/star.png", 32, 32);
                         } else {
                             setButtonIcon(btnFavorite, "Assets/un_star.png", 32, 32);
                         }
 
-                        if (meaning != null) {
+                        String htmlMeaning = dictionaryManager.getHtmlMeaning(selectedWord, isVietnameseToEnglishMode);
+                        if (htmlMeaning != null) {
                             MeaningArea.setText(htmlMeaning);
                         }
 
@@ -227,16 +230,16 @@ public class HomePageForm {
     public void refreshDictionary() {
         DefaultListModel<String> model = new DefaultListModel<>();
         System.out.println("[refreshDictionary] Refreshing dictionary");
+        System.out.println("[refreshDictionary] isVietnameseToEnglishMode: " + isVietnameseToEnglishMode);
         if (!isFavoriteHomePage) {
-            for (String word : (dictionaryManager.isVietnameseToEnglishMode ?
+            for (String word : (isVietnameseToEnglishMode ?
                     dictionaryManager.getVietnameseToEnglishDictionary().keySet() :
                     dictionaryManager.getEnglishToVietnameseDictionary().keySet())) {
                 model.addElement(word);
             }
         } else {
-            for (String word : (dictionaryManager.isVietnameseToEnglishMode ?
-                    dictionaryManager.getVietnameseToEnglishFavoriteWords().keySet() :
-                    dictionaryManager.getEnglishToVietnameseFavoriteWords().keySet())) {
+            System.out.println("[refreshDictionary] Refreshing favorite dictionary");
+            for (String word : dictionaryManager.getFavoriteWords(isVietnameseToEnglishMode).keySet()) {
                 model.addElement(word);
             }
         }
@@ -247,15 +250,14 @@ public class HomePageForm {
         DefaultListModel<String> model = new DefaultListModel<>();
         TreeSet<String> sortedWords = new TreeSet<>();
 
-
         if (!isFavoriteHomePage) {
-            if (dictionaryManager.isVietnameseToEnglishMode) {
+            if (isVietnameseToEnglishMode) {
                 sortedWords.addAll(dictionaryManager.getVietnameseToEnglishDictionary().keySet());
             } else {
                 sortedWords.addAll(dictionaryManager.getEnglishToVietnameseDictionary().keySet());
             }
         } else {
-            if (dictionaryManager.isVietnameseToEnglishMode) {
+            if (isVietnameseToEnglishMode) {
                 sortedWords.addAll(dictionaryManager.getVietnameseToEnglishFavoriteWords().keySet());
             } else {
                 sortedWords.addAll(dictionaryManager.getEnglishToVietnameseFavoriteWords().keySet());
@@ -276,9 +278,11 @@ public class HomePageForm {
 
     }
     public HomePageForm() {
+        System.out.println("[HomePageForm] Initializing HomePageForm");
         initComponents();
         initListeners();
         dictionaryManager = DictionaryManager.getInstance();
+        refreshDictionary();
     }
 
     public JButton getBtnChange() {
@@ -322,7 +326,7 @@ public class HomePageForm {
     }
 
     private void suggestWords(String keyword) {
-        String suggestedWord = dictionaryManager.suggest(keyword);
+        String suggestedWord = dictionaryManager.suggest(keyword, isVietnameseToEnglishMode);
         if (suggestedWord != null) {
             lbSuggestMessage.setText("Did you mean: " + suggestedWord + "?");
         } else {
@@ -351,12 +355,16 @@ public class HomePageForm {
         }
     }
 
-    public void switchModeButtonIcon(boolean isVietnameseToEnglishMode) {
+    public void switchModeButtonIcon() {
         if (isVietnameseToEnglishMode) {
             setButtonIcon(btnChange, "Assets/ic1.png", 40, 40);
         } else {
             setButtonIcon(btnChange, "Assets/ic2.png", 40, 40);
         }
+    }
+
+    public boolean isVietnameseToEnglishMode() {
+        return isVietnameseToEnglishMode;
     }
 
     public boolean isEditing() {
@@ -385,5 +393,10 @@ public class HomePageForm {
                 "Are you sure you want to delete '" + wordToDelete + "'?", "Delete Confirmation",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         return result == JOptionPane.YES_OPTION;
+    }
+
+    public void switchMode() {
+        isVietnameseToEnglishMode = !isVietnameseToEnglishMode;
+        refreshDictionary();
     }
 }

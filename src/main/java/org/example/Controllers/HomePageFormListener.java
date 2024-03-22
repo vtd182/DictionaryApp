@@ -31,7 +31,7 @@ public class HomePageFormListener implements ActionListener {
         if (selectedWord == null || selectedWord.isEmpty() || selectedWord == "Selection Word") {
             return;
         }
-        if (dictionaryManager.isFavoriteWord(selectedWord)) {
+        if (dictionaryManager.isFavoriteWord(selectedWord, homePageForm.isVietnameseToEnglishMode())) {
             dictionaryManager.removeFavoriteWord(selectedWord);
         } else {
             dictionaryManager.addFavoriteWord(selectedWord, dictionaryManager.getWord(selectedWord));
@@ -42,13 +42,13 @@ public class HomePageFormListener implements ActionListener {
             homePageForm.getSelectedWordLabel().setText("Selection Word");
         }
         System.out.println("Favorite button clicked");
-        homePageForm.switchFavoriteButtonIcon(dictionaryManager.isFavoriteWord(selectedWord));
+        homePageForm.switchFavoriteButtonIcon(dictionaryManager.isFavoriteWord(selectedWord, homePageForm.isVietnameseToEnglishMode()));
     }
 
     private void onChangeButtonClicked() {
         System.out.println("Change button clicked");
-        homePageForm.getDictionaryManager().switchMode();
-        homePageForm.switchModeButtonIcon(homePageForm.getDictionaryManager().isVietnameseToEnglishMode);
+        homePageForm.switchMode();
+        homePageForm.switchModeButtonIcon();
         homePageForm.refreshDictionary();
     }
 
@@ -82,7 +82,7 @@ public class HomePageFormListener implements ActionListener {
         // Lấy nghĩa mới từ ô nhập liệu
         String newMeaning = homePageForm.getMeaningArea().getText();
         homePageForm.switchEditingMode();
-        var isVietnameseToEnglishMode = homePageForm.getDictionaryManager().isVietnameseToEnglishMode;
+        var isVietnameseToEnglishMode = homePageForm.isVietnameseToEnglishMode();
         var selectedWord = homePageForm.getDictionaryManager().getWord(homePageForm.getSelectedWord());
 
         // Nếu đang ở chế độ chỉnh sửa thì hiển thị ở dạng string

@@ -1,13 +1,13 @@
 package org.example.Controllers;
 
-import org.example.Helper.PatternStringHelper;
+import org.example.Helper.ConstantString;
+import org.example.Models.AutoSaveManager;
 import org.example.Models.DictionaryManager;
 import org.example.Models.Word;
 import org.example.Views.SettingPageForm;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Set;
 
 public class SettingPageFormListener implements ActionListener {
     SettingPageForm settingPageForm;
@@ -38,6 +38,19 @@ public class SettingPageFormListener implements ActionListener {
             } else {
                 settingPageForm.getvERadioButton().setSelected(true);
             }
+        } else if (e.getSource() == settingPageForm.getComboBox_time_save()) {
+            onComboboxChange();
+        }
+    }
+
+    private void onComboboxChange() {
+        String selectedTime = (String) settingPageForm.getComboBox_time_save().getSelectedItem();
+        if (selectedTime.equals("5 minutes")) {
+            AutoSaveManager.getInstance().setSaveIntervalMinutes(5);
+        } else if (selectedTime.equals("10 minutes")) {
+            AutoSaveManager.getInstance().setSaveIntervalMinutes(10);
+        } else if (selectedTime.equals("1 minute")) {
+            AutoSaveManager.getInstance().setSaveIntervalMinutes(1);
         }
     }
 
@@ -46,7 +59,7 @@ public class SettingPageFormListener implements ActionListener {
         if (inputWord.isEmpty()) {
             return;
         }
-        String displayWord = "@" + inputWord + " /Pronunciation [optional]/\n" + PatternStringHelper.PatternForWordMeaning();
+        String displayWord = "@" + inputWord + " /Pronunciation [optional]/\n" + ConstantString.PatternForWordMeaning();
         settingPageForm.getDisplayWordArea().setText(displayWord);
         settingPageForm.getTfInputWord().setText("");
     }

@@ -1,5 +1,6 @@
 package org.example.Models;
 
+import org.example.Helper.ConstantString;
 import org.example.Helper.XMLHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -15,6 +16,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -27,27 +29,30 @@ public class DictionaryManager {
     private Map<String, Word> englishToVietnameseDictionary;
     private Map<String, Word> vietnameseToEnglishFavoriteWords;
     private Map<String, Word> englishToVietnameseFavoriteWords;
+    private Map<LocalDate, Map<String, Integer>> vietnameseToEnglishSearchFrequencyMap;
+    private Map<LocalDate, Map<String, Integer>> englishToVietnameseSearchFrequencyMap;
     public boolean isVietnameseToEnglishMode;
     private boolean isFavoriteMode;
-
     public void setIsFavoriteMode(boolean isFavoriteMode) {
         this.isFavoriteMode = isFavoriteMode;
     }
-
     public Map<String, Word> getVietnameseToEnglishDictionary() {
         return vietnameseToEnglishDictionary;
     }
-
     public Map<String, Word> getEnglishToVietnameseDictionary() {
         return englishToVietnameseDictionary;
     }
-
     public Map<String, Word> getVietnameseToEnglishFavoriteWords() {
         return vietnameseToEnglishFavoriteWords;
     }
-
     public Map<String, Word> getEnglishToVietnameseFavoriteWords() {
         return englishToVietnameseFavoriteWords;
+    }
+    public Map<LocalDate, Map<String, Integer>> getVietnameseToEnglishSearchFrequencyMap() {
+        return vietnameseToEnglishSearchFrequencyMap;
+    }
+    public Map<LocalDate, Map<String, Integer>> getEnglishToVietnameseSearchFrequencyMap() {
+        return englishToVietnameseSearchFrequencyMap;
     }
 
     public static DictionaryManager getInstance() {
@@ -64,62 +69,72 @@ public class DictionaryManager {
         this.englishToVietnameseFavoriteWords = new TreeMap<>();
         this.isVietnameseToEnglishMode = true; // Mặc định chế độ từ Việt-Anh
         this.isFavoriteMode = false;
+        loadData();
+    }
+
+    public void loadData() {
+        loadSearchFrequencyFromXML(ConstantString.VIETNAMESE_TO_ENGLISH_SEARCH_FREQUENCY_FILE_PATH,
+                ConstantString.ENGLISH_TO_VIETNAMESE_SEARCH_FREQUENCY_FILE_PATH);
+        loadDictionariesFromXML(ConstantString.VIETNAMESE_TO_ENGLISH_FILE_PATH,
+                ConstantString.ENGLISH_TO_VIETNAMESE_FILE_PATH);
+        loadFavoriteWordsFromXML(ConstantString.VIETNAMESE_TO_ENGLISH_FAVORITE_FILE_PATH,
+                ConstantString.ENGLISH_TO_VIETNAMESE_FAVORITE_FILE_PATH);
     }
 
     public void loadDictionariesFromXML(String vietnameseToEnglishFilePath, String englishToVietnameseFilePath) {
         vietnameseToEnglishDictionary = loadDictionaryFromXML(vietnameseToEnglishFilePath);
-        System.out.println("á" + vietnameseToEnglishDictionary.get("á"));
         englishToVietnameseDictionary = loadDictionaryFromXML(englishToVietnameseFilePath);
     }
 
-    public void loadFavoriteWordsFromXML(String vietnameseToEnglishFavoriteFilePath, String englishToVietnameseFavoriteFilePath) {
+    public void loadFavoriteWordsFromXML(String vietnameseToEnglishFavoriteFilePath,
+                                         String englishToVietnameseFavoriteFilePath) {
         vietnameseToEnglishFavoriteWords = loadDictionaryFromXML(vietnameseToEnglishFavoriteFilePath);
         englishToVietnameseFavoriteWords = loadDictionaryFromXML(englishToVietnameseFavoriteFilePath);
         System.out.println("Load favorite words from XML");
     }
 
-//    private TreeMap<String, Word> loadDictionaryFromXML(String filePath) {
-//        // Đọc dữ liệu từ file XML và trả về một HashMap
-//        TreeMap<String, Word> dictionary = new TreeMap<>();
-//        try {
-//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//            DocumentBuilder builder = factory.newDocumentBuilder();
-//            Document document = builder.parse(new File(filePath));
-//
-//            NodeList recordList = document.getElementsByTagName("record");
-//
-//            for (int i = 0; i < recordList.getLength(); i++) {
-//                Node recordNode = recordList.item(i);
-//
-//                if (recordNode.getNodeType() == Node.ELEMENT_NODE) {
-//                    Element recordElement = (Element) recordNode;
-//
-//                    String word = recordElement.getElementsByTagName("word").item(0).getTextContent();
-//
-//                    NodeList meaningList = recordElement.getElementsByTagName("meaning");
-//
-//                    StringBuilder meanings = new StringBuilder();
-//                    for (int j = 0; j < meaningList.getLength(); j++) {
-//                        Node meaningNode = meaningList.item(j);
-//
-//                        if (meaningNode.getNodeType() == Node.ELEMENT_NODE) {
-//                            Element meaningElement = (Element) meaningNode;
-//                            meanings.append(meaningElement.getTextContent()).append("\n");
-//                        }
-//                    }
-//                    try {
-//                        dictionary.put(word, Word.parseFromString(meanings.toString()));
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        System.out.println("Error while parsing word: " + word);
-//                    }
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return dictionary;
-//    }
+    public void saveSearchFrequencyToXML(String vietnameseToEnglishSearchFrequencyFilePath,
+                                         String englishToVietnameseSearchFrequencyFilePath) {
+        saveSearchFrequencyMapToXML(vietnameseToEnglishSearchFrequencyMap, vietnameseToEnglishSearchFrequencyFilePath,
+                "VietnameseToEnglishSearchFrequency");
+        saveSearchFrequencyMapToXML(englishToVietnameseSearchFrequencyMap, englishToVietnameseSearchFrequencyFilePath,
+                "EnglishToVietnameseSearchFrequency");
+    }
+
+    private void saveSearchFrequencyMapToXML(Map<LocalDate, Map<String, Integer>> searchFrequencyMap, String filePath,
+                                             String mapName) {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.newDocument();
+
+            Element rootElement = document.createElement(mapName);
+            document.appendChild(rootElement);
+
+            for (LocalDate date : searchFrequencyMap.keySet()) {
+                Element dateElement = document.createElement("date");
+                dateElement.setAttribute("date", date.toString());
+                rootElement.appendChild(dateElement);
+
+                Map<String, Integer> wordFrequencyMap = searchFrequencyMap.get(date);
+                for (String word : wordFrequencyMap.keySet()) {
+                    Element wordElement = document.createElement("word");
+                    wordElement.setAttribute("value", word);
+                    wordElement.setAttribute("frequency", String.valueOf(wordFrequencyMap.get(word)));
+                    dateElement.appendChild(wordElement);
+                }
+            }
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(new File(filePath));
+            transformer.transform(source, result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private TreeMap<String, Word> loadDictionaryFromXML(String filePath) {
         TreeMap<String, Word> dictionary = null;
@@ -132,8 +147,6 @@ public class DictionaryManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        System.out.println("From " + filePath + " " + dictionary.size() + " words loaded.");
-//        System.out.println(dictionary.get("á"));
         return dictionary;
     }
 
@@ -150,7 +163,12 @@ public class DictionaryManager {
         }
     }
 
-    public String getHtmlMeaning(String word) {
+    public String getHtmlMeaning(String word, boolean isVietnameseToEnglishMode) {
+        increaseSearchFrequency(word);
+        saveSearchFrequencyToXML(ConstantString.VIETNAMESE_TO_ENGLISH_SEARCH_FREQUENCY_FILE_PATH,
+                ConstantString.ENGLISH_TO_VIETNAMESE_SEARCH_FREQUENCY_FILE_PATH);
+        System.out.println("Get meaning of: " + word);
+        System.out.println("isVietnameseToEnglishMode: " + isVietnameseToEnglishMode);
         if (isVietnameseToEnglishMode) {
             return vietnameseToEnglishDictionary.get(word).toHtmlString();
         } else {
@@ -179,7 +197,7 @@ public class DictionaryManager {
         return relatedWords;
     }
 
-    public String suggest(String keyword) {
+    public String suggest(String keyword, boolean isVietnameseToEnglishMode) {
         String suggestedWord = null;
         int minDistance = Integer.MAX_VALUE;
 
@@ -224,7 +242,7 @@ public class DictionaryManager {
         return dp[s1.length()][s2.length()];
     }
 
-    public boolean isFavoriteWord(String word) {
+    public boolean isFavoriteWord(String word, boolean isVietnameseToEnglishMode) {
         if (isVietnameseToEnglishMode) {
             return vietnameseToEnglishFavoriteWords.containsKey(word);
         } else {
@@ -259,6 +277,11 @@ public class DictionaryManager {
     public void saveFavoriteWordsToXML(String vietnameseToEnglishFavoriteFilePath, String englishToVietnameseFavoriteFilePath) {
         saveDictionaryToXML(vietnameseToEnglishFavoriteWords, vietnameseToEnglishFavoriteFilePath);
         saveDictionaryToXML(englishToVietnameseFavoriteWords, englishToVietnameseFavoriteFilePath);
+    }
+
+    public void saveDictionaryToXML(String vietnameseToEnglishFilePath, String englishToVietnameseFilePath) {
+        saveDictionaryToXML(vietnameseToEnglishDictionary, vietnameseToEnglishFilePath);
+        saveDictionaryToXML(englishToVietnameseDictionary, englishToVietnameseFilePath);
     }
 
     private void saveDictionaryToXML(Map<String, Word> dictionary, String filePath) {
@@ -301,6 +324,100 @@ public class DictionaryManager {
         } else {
             englishToVietnameseDictionary.remove(word);
             englishToVietnameseFavoriteWords.remove(word);
+        }
+    }
+
+    private void increaseSearchFrequency(String word) {
+        LocalDate currentDate = LocalDate.now();
+        if (isVietnameseToEnglishMode) {
+            if (vietnameseToEnglishSearchFrequencyMap == null) {
+                vietnameseToEnglishSearchFrequencyMap = new HashMap<>();
+            }
+            if (!vietnameseToEnglishSearchFrequencyMap.containsKey(currentDate)) {
+                vietnameseToEnglishSearchFrequencyMap.put(currentDate, new HashMap<>());
+            }
+            if (!vietnameseToEnglishSearchFrequencyMap.get(currentDate).containsKey(word)) {
+                vietnameseToEnglishSearchFrequencyMap.get(currentDate).put(word, 0);
+            }
+            vietnameseToEnglishSearchFrequencyMap.get(currentDate).put(word, vietnameseToEnglishSearchFrequencyMap.get(currentDate).get(word) + 1);
+        } else {
+            if (englishToVietnameseSearchFrequencyMap == null) {
+                englishToVietnameseSearchFrequencyMap = new HashMap<>();
+            }
+            if (!englishToVietnameseSearchFrequencyMap.containsKey(currentDate)) {
+                englishToVietnameseSearchFrequencyMap.put(currentDate, new HashMap<>());
+            }
+            if (!englishToVietnameseSearchFrequencyMap.get(currentDate).containsKey(word)) {
+                englishToVietnameseSearchFrequencyMap.get(currentDate).put(word, 0);
+            }
+            englishToVietnameseSearchFrequencyMap.get(currentDate).put(word, englishToVietnameseSearchFrequencyMap.get(currentDate).get(word) + 1);
+        }
+    }
+
+    public Map<LocalDate, Map<String, Integer>> loadSearchFrequencyMapFromXML(String filePath, String mapName) {
+        Map<LocalDate, Map<String, Integer>> searchFrequencyMap = new HashMap<>();
+
+        try {
+            File inputFile = new File(filePath);
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(inputFile);
+
+            // Lấy phần tử gốc dựa trên mapName
+            NodeList nodeList = document.getElementsByTagName(mapName);
+
+            if (nodeList.getLength() > 0) {
+                Node rootElement = nodeList.item(0);
+
+                NodeList dateList = ((Element) rootElement).getElementsByTagName("date");
+
+                for (int i = 0; i < dateList.getLength(); i++) {
+                    Node dateNode = dateList.item(i);
+
+                    if (dateNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element dateElement = (Element) dateNode;
+                        LocalDate date = LocalDate.parse(dateElement.getAttribute("date"));
+                        Map<String, Integer> wordFrequencyMap = new HashMap<>();
+
+                        NodeList wordList = dateElement.getElementsByTagName("word");
+
+                        for (int j = 0; j < wordList.getLength(); j++) {
+                            Node wordNode = wordList.item(j);
+
+                            if (wordNode.getNodeType() == Node.ELEMENT_NODE) {
+                                Element wordElement = (Element) wordNode;
+                                String word = wordElement.getAttribute("value");
+                                int frequency = Integer.parseInt(wordElement.getAttribute("frequency"));
+                                wordFrequencyMap.put(word, frequency);
+                            }
+                        }
+
+                        searchFrequencyMap.put(date, wordFrequencyMap);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return searchFrequencyMap;
+    }
+
+    public void loadSearchFrequencyFromXML(String vietnameseToEnglishFilePath, String englishToVietnameseFilePath) {
+        englishToVietnameseSearchFrequencyMap = loadSearchFrequencyMapFromXML(englishToVietnameseFilePath,
+                "EnglishToVietnameseSearchFrequency");
+        vietnameseToEnglishSearchFrequencyMap = loadSearchFrequencyMapFromXML(vietnameseToEnglishFilePath,
+                "VietnameseToEnglishSearchFrequency");
+    }
+
+    public Map<String, Word> getFavoriteWords(boolean isVietnameseToEnglishMode) {
+        System.out.println("Get favorite words");
+        System.out.println("isVietnameseToEnglishMode: " + isVietnameseToEnglishMode);
+        if (isVietnameseToEnglishMode) {
+            return vietnameseToEnglishFavoriteWords;
+        } else {
+            return englishToVietnameseFavoriteWords;
         }
     }
 }

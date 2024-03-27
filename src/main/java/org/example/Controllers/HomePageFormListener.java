@@ -32,9 +32,10 @@ public class HomePageFormListener implements ActionListener {
             return;
         }
         if (dictionaryManager.isFavoriteWord(selectedWord, homePageForm.isVietnameseToEnglishMode())) {
-            dictionaryManager.removeFavoriteWord(selectedWord);
+            dictionaryManager.removeFavoriteWord(selectedWord, homePageForm.isVietnameseToEnglishMode());
         } else {
-            dictionaryManager.addFavoriteWord(selectedWord, dictionaryManager.getWord(selectedWord));
+            var word = dictionaryManager.getWord(selectedWord, homePageForm.isVietnameseToEnglishMode());
+            dictionaryManager.addFavoriteWord(selectedWord, word, homePageForm.isVietnameseToEnglishMode());
         }
         if (homePageForm.isFavoriteHomePage()) {
             homePageForm.refreshDictionary();
@@ -60,7 +61,7 @@ public class HomePageFormListener implements ActionListener {
         }
         if (homePageForm.showDeleteConfirmationDialog(selectedWord)) {
             // Xóa từ và cập nhật lại danh sách từ
-            homePageForm.getDictionaryManager().deleteWord(selectedWord);
+            homePageForm.getDictionaryManager().deleteWord(selectedWord, homePageForm.isVietnameseToEnglishMode());
             homePageForm.refreshDictionary();
             homePageForm.getMeaningArea().setText("");
             homePageForm.getSelectedWordLabel().setText("Selection Word");
@@ -83,7 +84,7 @@ public class HomePageFormListener implements ActionListener {
         String newMeaning = homePageForm.getMeaningArea().getText();
         homePageForm.switchEditingMode();
         var isVietnameseToEnglishMode = homePageForm.isVietnameseToEnglishMode();
-        var selectedWord = homePageForm.getDictionaryManager().getWord(homePageForm.getSelectedWord());
+        var selectedWord = homePageForm.getDictionaryManager().getWord(homePageForm.getSelectedWord(), isVietnameseToEnglishMode);
 
         // Nếu đang ở chế độ chỉnh sửa thì hiển thị ở dạng string
         if (homePageForm.isEditing()) {

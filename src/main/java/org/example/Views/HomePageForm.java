@@ -1,6 +1,7 @@
 package org.example.Views;
 
 import org.example.Controllers.HomePageFormListener;
+import org.example.Helper.ConstantString;
 import org.example.Models.DictionaryManager;
 import org.example.Models.Word;
 
@@ -15,11 +16,8 @@ import java.awt.event.ActionListener;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Collection;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class HomePageForm {
     private JList jlWord;
@@ -65,10 +63,10 @@ public class HomePageForm {
         lbSuggestMessage.setText("");
         lbSelectionWord.setText("Selection Word");
 
-        setButtonIcon(btnFavorite, "Assets/un_star.png", 32, 32);
-        setButtonIcon(btnEditSave, "Assets/edit.png", 32, 32);
-        setButtonIcon(btnDelete, "Assets/delete.png", 32, 32);
-        setButtonIcon(btnChange, "Assets/ic1.png", 40, 40);
+        setButtonIcon(btnFavorite, ConstantString.IC_STAR, 32, 32);
+        setButtonIcon(btnEditSave, ConstantString.IC_EDIT, 32, 32);
+        setButtonIcon(btnDelete, ConstantString.IC_DELETE, 32, 32);
+        setButtonIcon(btnChange, ConstantString.IC_VIETNAMESE_TO_ENGLISH, 40, 40);
     }
 
     private void initListeners() {
@@ -89,15 +87,20 @@ public class HomePageForm {
 
                         lbSelectionWord.setText(selectedWord);
                         if (dictionaryManager.isFavoriteWord(selectedWord, isVietnameseToEnglishMode)) {
-                            setButtonIcon(btnFavorite, "Assets/star.png", 32, 32);
+                            setButtonIcon(btnFavorite, ConstantString.IC_STAR_FILL, 32, 32);
                         } else {
-                            setButtonIcon(btnFavorite, "Assets/un_star.png", 32, 32);
+                            setButtonIcon(btnFavorite, ConstantString.IC_STAR, 32, 32);
                         }
 
-                        String htmlMeaning = dictionaryManager.getHtmlMeaning(selectedWord, isVietnameseToEnglishMode);
-                        if (htmlMeaning != null) {
-                            MeaningArea.setText(htmlMeaning);
+                        try {
+                            String htmlMeaning = dictionaryManager.getHtmlMeaning(selectedWord, isVietnameseToEnglishMode);
+                            if (htmlMeaning != null) {
+                                MeaningArea.setText(htmlMeaning);
+                            }
+                        } catch (Exception e) {
+                            MeaningArea.setText(ConstantString.ERROR_GET_WORD_MESSAGE_HTML);
                         }
+
 
                     }
                 }
@@ -229,21 +232,24 @@ public class HomePageForm {
 
     public void refreshDictionary() {
         DefaultListModel<String> model = new DefaultListModel<>();
-        System.out.println("[refreshDictionary] Refreshing dictionary");
-        System.out.println("[refreshDictionary] isVietnameseToEnglishMode: " + isVietnameseToEnglishMode);
-        if (!isFavoriteHomePage) {
-            for (String word : (isVietnameseToEnglishMode ?
-                    dictionaryManager.getVietnameseToEnglishDictionary().keySet() :
-                    dictionaryManager.getEnglishToVietnameseDictionary().keySet())) {
-                model.addElement(word);
+        try {
+            if (!isFavoriteHomePage) {
+                for (String word : (isVietnameseToEnglishMode ?
+                        dictionaryManager.getVietnameseToEnglishDictionary().keySet() :
+                        dictionaryManager.getEnglishToVietnameseDictionary().keySet())) {
+                    model.addElement(word);
+                }
+            } else {
+                System.out.println("[refreshDictionary] Refreshing favorite dictionary");
+                for (String word : dictionaryManager.getFavoriteWords(isVietnameseToEnglishMode).keySet()) {
+                    model.addElement(word);
+                }
             }
-        } else {
-            System.out.println("[refreshDictionary] Refreshing favorite dictionary");
-            for (String word : dictionaryManager.getFavoriteWords(isVietnameseToEnglishMode).keySet()) {
-                model.addElement(word);
-            }
+            jlWord.setModel(model);
+        } catch (Exception e) {
+            System.out.println("[refreshDictionary] Error: " + e.getMessage());
+            e.printStackTrace();
         }
-        jlWord.setModel(model);
     }
 
     private void refreshDictionary(boolean ascendingOrder) {
@@ -316,7 +322,7 @@ public class HomePageForm {
     private void searchAndUpdateList(String keyword) {
         System.out.println("[searchAndUpdateList] Searching for: " + keyword);
         DefaultListModel<String> model = new DefaultListModel<>();
-        TreeSet<String> relatedWords = dictionaryManager.search(keyword);
+        TreeSet<String> relatedWords = dictionaryManager.search(keyword, isVietnameseToEnglishMode);
 
         for (String word : relatedWords) {
             model.addElement(word);
@@ -339,7 +345,7 @@ public class HomePageForm {
     }
 
     private void setButtonIcon(JButton button, String iconPath, int width, int height) {
-        ImageIcon originalIcon = new ImageIcon(iconPath);
+        ImageIcon originalIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(iconPath)));
         Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         button.setIcon(new ImageIcon(scaledImage));
         button.setOpaque(false);
@@ -349,17 +355,17 @@ public class HomePageForm {
 
     public void switchFavoriteButtonIcon(boolean isFavorite) {
         if (isFavorite) {
-            setButtonIcon(btnFavorite, "Assets/star.png", 32, 32);
+            setButtonIcon(btnFavorite, ConstantString.IC_STAR_FILL, 32, 32);
         } else {
-            setButtonIcon(btnFavorite, "Assets/un_star.png", 32, 32);
+            setButtonIcon(btnFavorite, ConstantString.IC_STAR, 32, 32);
         }
     }
 
     public void switchModeButtonIcon() {
         if (isVietnameseToEnglishMode) {
-            setButtonIcon(btnChange, "Assets/ic1.png", 40, 40);
+            setButtonIcon(btnChange, ConstantString.IC_VIETNAMESE_TO_ENGLISH, 40, 40);
         } else {
-            setButtonIcon(btnChange, "Assets/ic2.png", 40, 40);
+            setButtonIcon(btnChange, ConstantString.IC_ENGLISH_TO_VIETNAMESE, 40, 40);
         }
     }
 
@@ -373,12 +379,12 @@ public class HomePageForm {
     public void switchEditingMode() {
         if (isEditing) {
             isEditing = false;
-            setButtonIcon(btnEditSave, "Assets/edit.png", 32, 32);
+            setButtonIcon(btnEditSave, ConstantString.IC_EDIT, 32, 32);
             MeaningArea.setEditable(false);
             MeaningArea.setContentType("text/html");
         } else {
             isEditing = true;
-            setButtonIcon(btnEditSave, "Assets/save.png", 32, 32);
+            setButtonIcon(btnEditSave, ConstantString.IC_SAVE, 32, 32);
             MeaningArea.setEditable(true);
             MeaningArea.setContentType("text");
         }

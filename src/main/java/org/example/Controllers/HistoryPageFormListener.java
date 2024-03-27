@@ -80,6 +80,9 @@ public class HistoryPageFormListener implements ActionListener {
         if (fromDate.isAfter(LocalDate.now())) {
             errorList.add(2);
         }
+        if (toDate.isAfter(LocalDate.now())) {
+            errorList.add(3);
+        }
     }
 
     private void showError() {
@@ -88,6 +91,9 @@ public class HistoryPageFormListener implements ActionListener {
         }
         if (errorList.contains(2)) {
             JOptionPane.showMessageDialog(null, "From date must be before current date", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        if (errorList.contains(3)) {
+            JOptionPane.showMessageDialog(null, "To date must be before current date", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

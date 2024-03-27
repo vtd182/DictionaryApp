@@ -1,6 +1,7 @@
 package org.example.Views;
 
 import org.example.Controllers.SettingPageFormListener;
+import org.example.Helper.ConstantString;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,7 +40,7 @@ public class SettingPageForm {
     }
 
     private void initComponent() {
-        setButtonIcon(btnSend, "Assets/send.png", 32, 32);
+        setButtonIcon(btnSend, ConstantString.IC_SEND, 32, 32);
         vERadioButton.setSelected(true);
         comboBox_time_save.addItem("1 minute");
         comboBox_time_save.addItem("5 minutes");

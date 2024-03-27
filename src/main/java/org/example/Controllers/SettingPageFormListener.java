@@ -59,7 +59,7 @@ public class SettingPageFormListener implements ActionListener {
         if (inputWord.isEmpty()) {
             return;
         }
-        String displayWord = "@" + inputWord + " /Pronunciation [optional]/\n" + ConstantString.PatternForWordMeaning();
+        String displayWord = "@" + inputWord + " /Pronunciation [optional]/\n" + ConstantString.PATTERN_FOR_WORD_MEANING;
         settingPageForm.getDisplayWordArea().setText(displayWord);
         settingPageForm.getTfInputWord().setText("");
     }

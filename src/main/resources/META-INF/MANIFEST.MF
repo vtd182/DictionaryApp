@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: org.example.Main
+Class-Path: jgoodies-common-1.8.1.jar jgoodies-forms-1.9.0.jar
+

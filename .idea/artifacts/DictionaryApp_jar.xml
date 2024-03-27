@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="DictionaryApp:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DictionaryApp_jar</output-path>
+    <root id="root">
+      <element id="archive" name="DictionaryApp.jar">
+        <element id="module-output" name="DictionaryApp" />
+      </element>
+      <element id="library" level="project" name="Maven: com.jgoodies:jgoodies-common:1.8.1" />
+      <element id="library" level="project" name="Maven: com.jgoodies:jgoodies-forms:1.9.0" />
+    </root>
+  </artifact>
+</component>

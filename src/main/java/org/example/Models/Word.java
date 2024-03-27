@@ -7,7 +7,7 @@ public class Word {
     private String word;
     private String pronunciation;
     private String meaning;
-    private List<WordType> wordTypes;
+    private final List<WordType> wordTypes;
 
     public Word(String word) {
         this.word = word;
@@ -27,9 +27,6 @@ public class Word {
 
     public String getWord() {
         return word;
-    }
-    public List<WordType> getWordTypes() {
-        return wordTypes;
     }
 
     public String getMeaning() {
@@ -61,7 +58,7 @@ public class Word {
         String[] lines = input.split("\n");
 
         String wordLine = (lines[0].substring(1)).trim();
-        String wordLineParts[] = wordLine.split("/");
+        String[] wordLineParts = wordLine.split("/");
         Word newWord = new Word(wordLine);
 
         if (wordLineParts.length == 2) {
@@ -97,13 +94,13 @@ public class Word {
                     wordType.addMeaning(meaning);
                 }
                 String[] parts = line.substring(1).trim().split("\\+");
+                SubMeaning subMeaning;
                 if (parts.length != 2) {
-                    SubMeaning subMeaning = new SubMeaning(parts[0], "");
-                    meaning.addSubMeaning(subMeaning);
+                    subMeaning = new SubMeaning(parts[0], "");
                 } else {
-                    SubMeaning subMeaning = new SubMeaning(parts[0], parts[1]);
-                    meaning.addSubMeaning(subMeaning);
+                    subMeaning = new SubMeaning(parts[0], parts[1]);
                 }
+                meaning.addSubMeaning(subMeaning);
             }
         }
         return newWord;
@@ -119,28 +116,33 @@ public class Word {
         String fontFamily = "Arial, sans-serif";
 
         if (pronunciation != null) {
-            html.append("<p style='font-size:" + fontSizeParagraph + "px; font-family: " + fontFamily + ";'>").append(pronunciation).append("</p>");
+            html.append("<p style='font-size:").append(fontSizeParagraph).append("px; font-family: ")
+                    .append(fontFamily).append(";'>").append(pronunciation).append("</p>");
         }
 
         for (WordType wordType : wordTypes) {
 
             if (!wordType.getType().equals("DEFAULT_TYPE")) {
-                html.append("<h2 style='font-size:" + fontSizeHeading + "px; font-family: " + fontFamily + ";'>").append(wordType.getType()).append("</h2>");
+                html.append("<h2 style='font-size:").append(fontSizeHeading).append("px; font-family: ")
+                        .append(fontFamily).append(";'>").append(wordType.getType()).append("</h2>");
             } else {
-                html.append("<h2 style='font-size:" + fontSizeHeading + "px; font-family: " + fontFamily + ";'>").append("Meaning").append("</h2>");
+                html.append("<h2 style='font-size:").append(fontSizeHeading).append("px; font-family: ")
+                        .append(fontFamily).append(";'>").append("Meaning").append("</h2>");
             }
             for (Meaning meaning : wordType.getMeanings()) {
-                html.append("<p style='margin-left:" + marginLeft + "px;font-size:" + fontSizeParagraph + "px; font-family: " + fontFamily + "; color:#FF6347'>").append("<strong>").append(meaning.getMeaning()).append("</strong>").append("</p>");
+                html.append("<p style='margin-left:").append(marginLeft).append("px;font-size:")
+                        .append(fontSizeParagraph).append("px; font-family: ")
+                        .append(fontFamily).append("; color:#FF6347'>").append("<strong>").append(meaning.getMeaning())
+                        .append("</strong>").append("</p>");
 
                 for (SubMeaning subMeaning : meaning.getSubMeanings()) {
-                    html.append("<p style='margin-left:" + marginLeft + "px;font-size:" + (fontSizeParagraph - 2) + "px; font-family: " + fontFamily + ";'>").append(subMeaning.getSubMeaning())
+                    html.append("<p style='margin-left:").append(marginLeft).append("px;font-size:")
+                            .append(fontSizeParagraph - 2).append("px; font-family: ").append(fontFamily)
+                            .append(";'>").append(subMeaning.getSubMeaning())
                             .append(": ")
                             .append("<i>")
                             .append(subMeaning.getDefinition()).append("</i>")
                             .append("</p>");
-//                    html.append("<p style='margin-left:" + marginLeft + "px;font-size:" + (fontSizeParagraph - 2) + "px; font-family: " + fontFamily + ";'>").append("<i>")
-//                            .append(subMeaning.getDefinition()).append("</i>")
-//                            .append("</p>");
                 }
             }
         }

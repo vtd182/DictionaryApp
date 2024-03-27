@@ -45,12 +45,12 @@ public class SettingPageFormListener implements ActionListener {
 
     private void onComboboxChange() {
         String selectedTime = (String) settingPageForm.getComboBox_time_save().getSelectedItem();
-        if (selectedTime.equals("5 minutes")) {
-            AutoSaveManager.getInstance().setSaveIntervalMinutes(5);
-        } else if (selectedTime.equals("10 minutes")) {
-            AutoSaveManager.getInstance().setSaveIntervalMinutes(10);
-        } else if (selectedTime.equals("1 minute")) {
-            AutoSaveManager.getInstance().setSaveIntervalMinutes(1);
+        switch (selectedTime) {
+            case "5 minutes" -> AutoSaveManager.getInstance().setSaveIntervalMinutes(5);
+            case "10 minutes" -> AutoSaveManager.getInstance().setSaveIntervalMinutes(10);
+            case "1 minute" -> AutoSaveManager.getInstance().setSaveIntervalMinutes(1);
+            case null -> {}
+            default -> throw new IllegalStateException("Unexpected value: " + selectedTime);
         }
     }
 

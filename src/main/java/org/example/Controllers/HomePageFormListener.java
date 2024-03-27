@@ -12,6 +12,7 @@ public class HomePageFormListener implements ActionListener {
     public HomePageFormListener(HomePageForm homePageForm) {
         this.homePageForm = homePageForm;
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == homePageForm.getBtnChange()) {
@@ -22,13 +23,28 @@ public class HomePageFormListener implements ActionListener {
             onEditSaveButtonClicked();
         } else if (e.getSource() == homePageForm.getBtnFavorite()) {
             onFavoriteButtonClicked();
+        } else if (e.getSource() == homePageForm.getRbtnZA()) {
+            if (homePageForm.getRbtnZA().isSelected()) {
+                homePageForm.refreshDictionary(false);
+                homePageForm.getRbtnAZ().setSelected(false);
+            } else {
+                homePageForm.getRbtnZA().setSelected(true);
+            }
+
+        } else if (e.getSource() == homePageForm.getRbtnAZ()) {
+            if (homePageForm.getRbtnAZ().isSelected()) {
+                homePageForm.refreshDictionary(true);
+                homePageForm.getRbtnZA().setSelected(false);
+            } else {
+                homePageForm.getRbtnAZ().setSelected(true);
+            }
         }
     }
 
     private void onFavoriteButtonClicked() {
         var dictionaryManager = homePageForm.getDictionaryManager();
         var selectedWord = homePageForm.getSelectedWord();
-        if (selectedWord == null || selectedWord.isEmpty() || selectedWord == "Selection Word") {
+        if (selectedWord == null || selectedWord.isEmpty() || selectedWord.equals("Selection Word")) {
             return;
         }
         if (dictionaryManager.isFavoriteWord(selectedWord, homePageForm.isVietnameseToEnglishMode())) {
@@ -56,7 +72,7 @@ public class HomePageFormListener implements ActionListener {
     private void onDeleteButtonClicked() {
         System.out.println("Delete button clicked");
         String selectedWord = homePageForm.getSelectedWord();
-        if (selectedWord == null || selectedWord.isEmpty() || selectedWord == "Selection Word") {
+        if (selectedWord == null || selectedWord.isEmpty() || selectedWord.equals("Selection Word")) {
             return;
         }
         if (homePageForm.showDeleteConfirmationDialog(selectedWord)) {
@@ -72,11 +88,11 @@ public class HomePageFormListener implements ActionListener {
         System.out.println("Edit/Save button clicked");
         homePageForm.getDictionaryManager().saveFavoriteWordsToXML
                 ("Assets/Fav_Viet_Anh.xml",
-                "Assets/Fav_Anh_Viet.xml");
+                        "Assets/Fav_Anh_Viet.xml");
 
         // Nếu màn hình đang ở chế độ chờ thì không làm gì cả
         var word = homePageForm.getSelectedWord();
-        if (word == null || word.isEmpty() || word == "Selection Word") {
+        if (word == null || word.isEmpty() || word.equals("Selection Word")) {
             return;
         }
 

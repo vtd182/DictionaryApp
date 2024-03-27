@@ -62,7 +62,6 @@ public class HistoryPageForm {
 
     public void updateWordFrequencyTable(Map<String, Integer> wordFrequencyMap) {
         WordFrequencyTableModel model = new WordFrequencyTableModel(wordFrequencyMap);
-        AbstractButton wordFrequencyTable;
         wordTable.setModel(model);
     }
 }

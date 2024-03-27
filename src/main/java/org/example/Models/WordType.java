@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WordType {
-    private String type;
-    private List<Meaning> meanings;
+    private final String type;
+    private final List<Meaning> meanings;
 
     public WordType(String type) {
         this.type = type;

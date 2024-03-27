@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -15,7 +14,7 @@ import java.util.Vector;
 public class HistoryPageFormListener implements ActionListener {
     HistoryPageForm historyPageForm;
 
-    private DictionaryManager dictionaryManager = DictionaryManager.getInstance();
+    private final DictionaryManager dictionaryManager = DictionaryManager.getInstance();
     Vector<Integer> errorList = new Vector<>();
 
     public HistoryPageFormListener(HistoryPageForm historyPageForm) {

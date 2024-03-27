@@ -48,7 +48,7 @@ public class AutoSaveManager {
 
     private void restartAutoSave() {
         autoSaveTimer.cancel();
-        autoSaveTimer = new Timer(true); // Tạo một Timer mới để cập nhật thời gian
+        autoSaveTimer = new Timer(true);
         startAutoSave();
     }
 }

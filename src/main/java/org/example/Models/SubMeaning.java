@@ -1,8 +1,8 @@
 package org.example.Models;
 
 public class SubMeaning {
-    private String subMeaning;
-    private String definition;
+    private final String subMeaning;
+    private final String definition;
 
     public SubMeaning(String subMeaning, String definition) {
         this.subMeaning = subMeaning;

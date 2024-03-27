@@ -2,20 +2,22 @@ package org.example.Helper;
 
 public class ConstantString {
     public static String PATTERN_FOR_WORD_MEANING =
-                    "*WordType A \n" +
-                    "   -Meaning A.1\n" +
-                    "       =Sub meaning A.1.1 + definition A.1.1 \n" +
-                    "*WordType B \n" +
-                    "   -Meaning B.1\n" +
-                    "       =Sub meaning B.1.1 + definition B.1.1 \n";
+            """
+                    *WordType A\s
+                       -Meaning A.1
+                           =Sub meaning A.1.1 + definition A.1.1\s
+                    *WordType B\s
+                       -Meaning B.1
+                           =Sub meaning B.1.1 + definition B.1.1\s
+                    """;
 
-    public static final String ERROR_GET_WORD_MESSAGE_HTML = "<html>\n" +
-            "<body>\n" +
-            "    <p style='color:#FF0000; text-align:center; font-size:15px; font-family:Arial, sans-serif;'" +
-            ">CAN NOT FIND THE MEANING OF THIS WORD<" +
-            "/p>\n" +
-            "</body>\n" +
-            "</html>\n";
+    public static final String ERROR_GET_WORD_MESSAGE_HTML = """
+            <html>
+            <body>
+                <p style='color:#FF0000; text-align:center; font-size:15px; font-family:Arial, sans-serif;'>CAN NOT FIND THE MEANING OF THIS WORD</p>
+            </body>
+            </html>
+            """;
 
     public static final String VIETNAMESE_TO_ENGLISH_FILE_PATH = "Data/Viet_Anh.xml";
     public static final String ENGLISH_TO_VIETNAMESE_FILE_PATH = "Data/Anh_Viet.xml";

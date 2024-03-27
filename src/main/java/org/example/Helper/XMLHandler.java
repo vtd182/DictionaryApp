@@ -8,7 +8,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.util.TreeMap;
 
 public class XMLHandler extends DefaultHandler {
-    private TreeMap<String, Word> dictionary;
+    private final TreeMap<String, Word> dictionary;
     private String currentElement;
     private String currentWord;
     private StringBuilder currentMeanings;
@@ -21,7 +21,7 @@ public class XMLHandler extends DefaultHandler {
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
         currentElement = qName;
         if ("record".equals(qName)) {
             currentWord = "";
@@ -39,7 +39,7 @@ public class XMLHandler extends DefaultHandler {
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName) throws SAXException {
+    public void endElement(String uri, String localName, String qName) {
         if ("record".equals(qName)) {
             try {
                 dictionary.put(currentWord, Word.parseFromString(currentMeanings.toString()));

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Meaning {
     private String meaning;
-    private List<SubMeaning> subMeanings;
+    private final List<SubMeaning> subMeanings;
 
     public Meaning(String meaning) {
         this.meaning = meaning;

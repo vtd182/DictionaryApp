@@ -1,7 +1,6 @@
 package org.example.Models;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.List;
 import java.util.Map;
 
 public class WordFrequencyTableModel extends AbstractTableModel {

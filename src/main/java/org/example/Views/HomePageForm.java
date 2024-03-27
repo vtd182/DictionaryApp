@@ -19,6 +19,8 @@ import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
 
+import static org.example.Helper.GlobalFunction.setButtonIcon;
+
 public class HomePageForm {
     private JList jlWord;
     private JButton btnChange;
@@ -342,15 +344,6 @@ public class HomePageForm {
 
     private void setDefaultValueForSuggest() {
         lbSuggestMessage.setText("");
-    }
-
-    private void setButtonIcon(JButton button, String iconPath, int width, int height) {
-        ImageIcon originalIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(iconPath)));
-        Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        button.setIcon(new ImageIcon(scaledImage));
-        button.setOpaque(false);
-        button.setBorderPainted(false);
-        button.setContentAreaFilled(false);
     }
 
     public void switchFavoriteButtonIcon(boolean isFavorite) {

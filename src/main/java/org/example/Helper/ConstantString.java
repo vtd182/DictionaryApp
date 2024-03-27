@@ -11,7 +11,9 @@ public class ConstantString {
 
     public static final String ERROR_GET_WORD_MESSAGE_HTML = "<html>\n" +
             "<body>\n" +
-            "    <p style='color:#FF0000; text-align:center; font-size:15px; font-family:Arial, sans-serif;'>CAN NOT FIND THE MEANING OF THIS WORD</p>\n" +
+            "    <p style='color:#FF0000; text-align:center; font-size:15px; font-family:Arial, sans-serif;'" +
+            ">CAN NOT FIND THE MEANING OF THIS WORD<" +
+            "/p>\n" +
             "</body>\n" +
             "</html>\n";
 

@@ -2,6 +2,7 @@ package org.example.Views;
 
 import org.example.Controllers.SettingPageFormListener;
 import org.example.Helper.ConstantString;
+import org.example.Helper.GlobalFunction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,7 +41,7 @@ public class SettingPageForm {
     }
 
     private void initComponent() {
-        setButtonIcon(btnSend, ConstantString.IC_SEND, 32, 32);
+        GlobalFunction.setButtonIcon(btnSend, ConstantString.IC_SEND, 32, 32);
         vERadioButton.setSelected(true);
         comboBox_time_save.addItem("1 minute");
         comboBox_time_save.addItem("5 minutes");
@@ -54,14 +55,6 @@ public class SettingPageForm {
         eVRadioButton.addActionListener(settingPageFormListener);
         vERadioButton.addActionListener(settingPageFormListener);
         comboBox_time_save.addActionListener(settingPageFormListener);
-    }
-    private void setButtonIcon(JButton button, String iconPath, int width, int height) {
-        ImageIcon originalIcon = new ImageIcon(iconPath);
-        Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        button.setIcon(new ImageIcon(scaledImage));
-        button.setOpaque(false);
-        button.setBorderPainted(false);
-        button.setContentAreaFilled(false);
     }
 
     public JButton getBtnSend() {

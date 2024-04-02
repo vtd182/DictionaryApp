@@ -20,11 +20,12 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class GlobalFunction {
     public static void setButtonIcon(JButton button, String iconPath, int width, int height) {
-        ImageIcon originalIcon = new ImageIcon(GlobalFunction.class.getResource(iconPath));
+        ImageIcon originalIcon = new ImageIcon(Objects.requireNonNull(GlobalFunction.class.getResource(iconPath)));
         Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         button.setIcon(new ImageIcon(scaledImage));
         button.setOpaque(false);
@@ -178,6 +179,77 @@ public class GlobalFunction {
             transformer.transform(source, result);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void createXMLFile(String filePath, String rootTagName) {
+        try {
+            // Tạo một đối tượng File từ đường dẫn
+            File file = new File(filePath);
+
+            // Kiểm tra nếu thư mục cha của file không tồn tại thì tạo thư mục đó
+            File parentDir = file.getParentFile();
+            if (!parentDir.exists()) {
+                parentDir.mkdirs(); // Tạo thư mục và tất cả các thư mục cha nếu chúng không tồn tại
+            }
+
+            // Tạo một đối tượng DocumentBuilderFactory
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+            // Tạo một đối tượng DocumentBuilder từ factory
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            // Tạo một đối tượng Document
+            Document doc = builder.newDocument();
+
+            // Tạo một element root với tagname được chỉ định
+            Element rootElement = doc.createElement(rootTagName);
+            doc.appendChild(rootElement);
+
+            // Tạo một đối tượng TransformerFactory
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
+            // Tạo một đối tượng Transformer từ TransformerFactory
+            Transformer transformer = transformerFactory.newTransformer();
+
+            // Tạo một DOMSource từ Document
+            DOMSource source = new DOMSource(doc);
+
+            // Tạo một StreamResult cho việc ghi ra file
+            StreamResult result = new StreamResult(file);
+
+            // Sử dụng Transformer để ghi DOMSource ra StreamResult
+            transformer.transform(source, result);
+
+            System.out.println("File '" + filePath + "' created successfully.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static boolean isFileExist(String filePath) {
+        File file = new File(filePath);
+        return file.exists();
+    }
+
+    public static void checkAndCreateFile() {
+        if (!isFileExist(ConstantString.ENGLISH_TO_VIETNAMESE_FAVORITE_FILE_PATH)) {
+            createXMLFile(ConstantString.ENGLISH_TO_VIETNAMESE_FAVORITE_FILE_PATH, "dictionary");
+            System.out.println("Create file: " + ConstantString.ENGLISH_TO_VIETNAMESE_FAVORITE_FILE_PATH);
+        }
+        if (!isFileExist(ConstantString.VIETNAMESE_TO_ENGLISH_FAVORITE_FILE_PATH)) {
+            createXMLFile(ConstantString.VIETNAMESE_TO_ENGLISH_FAVORITE_FILE_PATH, "dictionary");
+            System.out.println("Create file: " + ConstantString.VIETNAMESE_TO_ENGLISH_FAVORITE_FILE_PATH);
+        }
+        if (!isFileExist(ConstantString.ENGLISH_TO_VIETNAMESE_SEARCH_FREQUENCY_FILE_PATH)) {
+            createXMLFile(ConstantString.ENGLISH_TO_VIETNAMESE_SEARCH_FREQUENCY_FILE_PATH, "EnglishToVietnameseSearchFrequency");
+            System.out.println("Create file: " + ConstantString.ENGLISH_TO_VIETNAMESE_SEARCH_FREQUENCY_FILE_PATH);
+        }
+        if (!isFileExist(ConstantString.VIETNAMESE_TO_ENGLISH_SEARCH_FREQUENCY_FILE_PATH)) {
+            createXMLFile(ConstantString.VIETNAMESE_TO_ENGLISH_SEARCH_FREQUENCY_FILE_PATH, "VietnameseToEnglishSearchFrequency");
+            System.out.println("Create file: " + ConstantString.VIETNAMESE_TO_ENGLISH_SEARCH_FREQUENCY_FILE_PATH);
         }
     }
 }

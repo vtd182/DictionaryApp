@@ -22,7 +22,7 @@ public class ConstantString {
     public static final String VIETNAMESE_TO_ENGLISH_FILE_PATH = "Data/Viet_Anh.xml";
     public static final String ENGLISH_TO_VIETNAMESE_FILE_PATH = "Data/Anh_Viet.xml";
     public static final String VIETNAMESE_TO_ENGLISH_FAVORITE_FILE_PATH = "Data/Fav_Viet_Anh.xml";
-    public static final String ENGLISH_TO_VIETNAMESE_FAVORITE_FILE_PATH = "Data/Fav_Viet_Anh.xml";
+    public static final String ENGLISH_TO_VIETNAMESE_FAVORITE_FILE_PATH = "Data/Fav_Anh_Viet.xml";
     public static final String VIETNAMESE_TO_ENGLISH_SEARCH_FREQUENCY_FILE_PATH = "Data/Frequency_Viet_Anh.xml";
     public static final String ENGLISH_TO_VIETNAMESE_SEARCH_FREQUENCY_FILE_PATH = "Data/Frequency_Anh_Viet.xml";
     public static final String IC_STAR = "/assets/un_star.png";

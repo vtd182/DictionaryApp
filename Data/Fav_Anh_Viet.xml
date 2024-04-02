@@ -12,6 +12,21 @@
 </meaning></record><record><word>Cash flow statement</word><meaning>@Cash flow statement
 *DEFAULT_TYPE
 -(Econ) Bản báo cáo luồng tiền / ngân lưu.
+</meaning></record><record><word>Fixed factors</word><meaning>@Fixed factors
+*DEFAULT_TYPE
+-(Econ) Các yếu tố sản xuất cố định; các sản tố cố định.
+</meaning></record><record><word>Flexitime</word><meaning>@Flexitime
+*DEFAULT_TYPE
+-(Econ) Thời gian làm việc linh hoạt.
+</meaning></record><record><word>Floating charge</word><meaning>@Floating charge
+*DEFAULT_TYPE
+-(Econ) Phí linh động
+</meaning></record><record><word>General grant</word><meaning>@General grant
+*DEFAULT_TYPE
+-(Econ) Trợ cấp chung.
+</meaning></record><record><word>Internal rate of return</word><meaning>@Internal rate of return
+*DEFAULT_TYPE
+-(Econ) Nội suất sinh lợi
 </meaning></record><record><word>jural</word><meaning>@jural /'dʤuərəl/
 *tính từ
 -(thuộc) luật pháp

@@ -86,9 +86,7 @@ public class HomePageFormListener implements ActionListener {
 
     private void onEditSaveButtonClicked() {
         System.out.println("Edit/Save button clicked");
-        homePageForm.getDictionaryManager().saveFavoriteWordsToXML
-                ("Assets/Fav_Viet_Anh.xml",
-                        "Assets/Fav_Anh_Viet.xml");
+        homePageForm.getDictionaryManager().saveFavoriteWordsToXML("Assets/Fav_Viet_Anh.xml", "Assets/Fav_Anh_Viet.xml");
 
         // Nếu màn hình đang ở chế độ chờ thì không làm gì cả
         var word = homePageForm.getSelectedWord();

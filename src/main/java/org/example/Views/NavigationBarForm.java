@@ -2,6 +2,7 @@ package org.example.Views;
 
 import org.example.Controllers.NavigationBarFromListener;
 import org.example.Helper.ConstantString;
+import org.example.Helper.GlobalFunction;
 import org.example.Models.AutoSaveManager;
 import org.example.Models.DictionaryManager;
 
@@ -9,7 +10,7 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Set;
+
 
 public class NavigationBarForm extends JFrame {
     private JPanel NavigationBarForm;
@@ -89,14 +90,16 @@ public class NavigationBarForm extends JFrame {
     }
     public NavigationBarForm() {
         // load data
+        GlobalFunction.checkAndCreateFile();
         try {
             DictionaryManager.getInstance().loadData();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+
         System.out.println(DictionaryManager.getInstance().getErrorList().size());
-        if (DictionaryManager.getInstance().getErrorList().size() != 0) {   // Nếu có lỗi khi load dữ liệu
+        if (!DictionaryManager.getInstance().getErrorList().isEmpty()) {   // Nếu có lỗi khi load dữ liệu
             StringBuilder errorString = new StringBuilder();
             var errorSet = DictionaryManager.getInstance().getErrorList();
             for (var errorCode : errorSet) {
@@ -121,7 +124,7 @@ public class NavigationBarForm extends JFrame {
                         break;
                 }
             }
-            JOptionPane.showMessageDialog(null, "Load fail: \n" + errorString.toString(),
+            JOptionPane.showMessageDialog(null, "Load fail: \n" + errorString,
                     "ERROR", JOptionPane.ERROR_MESSAGE);
 
         }
